@@ -1,12 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Học Xác suất – Thống kê</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<title>Học Toán</title>
+<meta name="description" content="Nền tảng học Toán — bắt đầu với Xác suất & Thống kê, mở rộng tới mọi chủ đề Toán.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 <style>
 :root{
   --ink:#14315B; --royal:#1F4E8C; --teal:#0F6E6E; --amber:#B7791F;
@@ -25,982 +23,145 @@ body{
   font-family:"Be Vietnam Pro",system-ui,sans-serif;
   background:var(--paper); color:var(--text);
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  min-height:100vh; display:flex; flex-direction:column;
 }
 .serif{font-family:"Spectral",Georgia,serif}
 a{color:var(--royal)}
-button{font-family:inherit}
 
-/* ---------- Shell ---------- */
-.app{display:flex; min-height:100vh}
-.sidebar{
-  width:264px; flex-shrink:0; background:var(--ink); color:#E9EEF6;
-  display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
-}
-.brand{padding:22px 22px 16px; border-bottom:1px solid rgba(255,255,255,.09)}
-.brand .eyebrow{font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:#8FA6C4; font-weight:600}
-.brand h1{font-family:"Spectral",serif; font-weight:600; font-size:21px; margin:5px 0 0; line-height:1.15; letter-spacing:.01em}
-.brand .sub{font-size:11.5px; color:#9DB2CE; margin-top:5px}
-.nav{padding:14px 12px; display:flex; flex-direction:column; gap:2px; overflow-y:auto}
-.nav button{
-  display:flex; align-items:center; gap:11px; width:100%; text-align:left;
-  background:transparent; border:0; color:#C6D3E6; padding:10px 12px;
-  border-radius:9px; cursor:pointer; font-size:14px; font-weight:500; transition:.15s;
-}
-.nav button .ic{width:18px; height:18px; flex-shrink:0; opacity:.85}
-.nav button:hover{background:rgba(255,255,255,.07); color:#fff}
-.nav button.on{background:var(--teal); color:#fff; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-.nav button.on .ic{opacity:1}
-.nav .badge{margin-left:auto; background:var(--amber); color:#fff; font-size:11px; font-weight:700;
-  min-width:20px; height:20px; padding:0 6px; border-radius:10px; display:flex; align-items:center; justify-content:center}
-.nav .sep{font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#6F86A6; padding:14px 14px 6px; font-weight:600}
-.side-foot{margin-top:auto; padding:14px 18px; border-top:1px solid rgba(255,255,255,.09); font-size:11.5px; color:#8298B6}
-.side-foot button{background:none;border:0;color:#9DB2CE;cursor:pointer;font-size:11.5px;text-decoration:underline;padding:0;margin-top:6px}
-
-.main{flex:1; min-width:0; display:flex; flex-direction:column}
-.topbar{display:none}
-.content{padding:30px 40px 70px; max-width:1080px; width:100%; margin:0 auto}
-.view-title{font-family:"Spectral",serif; font-size:30px; font-weight:600; color:var(--ink); margin:0 0 4px; letter-spacing:.01em}
-.view-sub{color:var(--muted); margin:0 0 26px; font-size:14.5px}
-
-/* ---------- Dashboard ---------- */
+/* hero */
 .hero{
-  background:linear-gradient(135deg,#16335E 0%,#0F2647 100%); color:#EaF0F8;
-  border-radius:20px; padding:30px 34px; display:flex; gap:30px; align-items:center;
-  box-shadow:var(--shadow); position:relative; overflow:hidden; flex-wrap:wrap;
+  background:var(--ink); color:#E9EEF6;
+  padding:64px 24px 88px; position:relative; overflow:hidden;
 }
-.hero .curvewrap{flex:1; min-width:300px}
-.hero h2{font-family:"Spectral",serif; font-weight:500; font-size:20px; margin:0 0 3px; color:#fff}
-.hero .pct{font-family:"Spectral",serif; font-size:54px; font-weight:700; line-height:1; color:#fff; letter-spacing:-.01em}
-.hero .pct small{font-size:20px; font-weight:500; color:#A9C0DE; margin-left:4px}
-.hero .heronote{font-size:13px; color:#A9C0DE; margin-top:8px; max-width:300px}
-.hero svg{display:block; width:100%; height:auto}
-.hero .hero-info{flex-shrink:0}
-
-.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-top:22px}
-.stat{background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; box-shadow:var(--shadow-sm)}
-.stat .k{font-size:12px; color:var(--muted); font-weight:600; letter-spacing:.02em; display:flex; align-items:center; gap:7px}
-.stat .v{font-family:"Spectral",serif; font-size:32px; font-weight:600; color:var(--ink); margin-top:6px; line-height:1}
-.stat .u{font-size:13px; color:var(--faint); font-weight:500}
-.stat .dot{width:9px;height:9px;border-radius:50%}
-
-.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:22px 24px; box-shadow:var(--shadow-sm); margin-top:22px}
-.panel h3{font-family:"Spectral",serif; font-size:18px; color:var(--ink); margin:0 0 4px; font-weight:600}
-.panel .lead{color:var(--muted); font-size:13.5px; margin:0 0 16px}
-.btn{display:inline-flex; align-items:center; gap:8px; background:var(--teal); color:#fff; border:0;
-  padding:11px 20px; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; transition:.15s; box-shadow:var(--shadow-sm)}
-.btn:hover{background:#0B5757; transform:translateY(-1px)}
-.btn.ghost{background:var(--soft-teal); color:var(--teal)}
-.btn.ghost:hover{background:#D5E9E7; transform:none}
-.btn.amber{background:var(--amber)} .btn.amber:hover{background:#9C6516}
-.btn.ink{background:var(--ink)} .btn.ink:hover{background:#0F2647}
-.btn.lg{padding:14px 26px; font-size:15px}
-.btn:disabled{opacity:.5; cursor:default; transform:none}
-
-.chaptrack{display:flex; flex-direction:column; gap:9px; margin-top:6px}
-.ctrow{display:flex; align-items:center; gap:13px}
-.ctrow .name{font-size:13.5px; font-weight:500; width:230px; flex-shrink:0; color:var(--text)}
-.ctrow .name small{color:var(--faint); font-weight:500}
-.bar{flex:1; height:8px; background:var(--soft-gray); border-radius:5px; overflow:hidden}
-.bar i{display:block; height:100%; background:linear-gradient(90deg,var(--teal),#2A8C8C); border-radius:5px; transition:width .5s ease}
-.ctrow .num{font-size:12px; color:var(--muted); width:42px; text-align:right; font-variant-numeric:tabular-nums}
-
-/* ---------- Lessons ---------- */
-.lessons-layout{display:flex; gap:26px; align-items:flex-start}
-.chaplist{width:250px; flex-shrink:0; position:sticky; top:20px}
-.chaplist .part{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); font-weight:700; margin:16px 8px 7px}
-.chaplist .part:first-child{margin-top:0}
-.chaplist button{display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:transparent;
-  border:0; padding:9px 12px; border-radius:9px; cursor:pointer; font-size:13.5px; color:var(--text); font-weight:500; transition:.13s}
-.chaplist button:hover{background:var(--soft-gray)}
-.chaplist button.on{background:var(--ink); color:#fff}
-.chaplist .cnum{font-family:"Spectral",serif; font-weight:700; font-size:13px; width:26px; height:26px; flex-shrink:0;
-  background:var(--soft-blue); color:var(--royal); border-radius:7px; display:flex; align-items:center; justify-content:center}
-.chaplist button.on .cnum{background:rgba(255,255,255,.16); color:#fff}
-.chaplist .ck{margin-left:auto; color:var(--forest); font-weight:700; font-size:13px}
-.chaplist button.on .ck{color:#9FE3A8}
-
-.reader{flex:1; min-width:0}
-.reader .chead{border-bottom:2px solid var(--line); padding-bottom:14px; margin-bottom:8px}
-.reader .chead .eb{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:700}
-.reader .chead h2{font-family:"Spectral",serif; font-size:27px; color:var(--ink); margin:5px 0 0; font-weight:600}
-.sec{margin-top:26px}
-.sec h3{font-family:"Spectral",serif; font-size:19px; color:var(--royal); font-weight:600; margin:0 0 10px;
-  display:flex; align-items:baseline; gap:9px}
-.sec h3 .sn{font-size:13px; color:var(--amber); font-weight:700; font-family:"Be Vietnam Pro"}
-.sec p{margin:9px 0}
-.sec ul{margin:9px 0; padding-left:22px} .sec li{margin:3px 0}
-
-.box{border-radius:12px; padding:14px 16px 14px; margin:14px 0; border:1px solid; position:relative}
-.box .lab{font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; display:inline-block; margin-bottom:6px;
-  padding:2px 9px; border-radius:20px; color:#fff}
-.box .ttl{font-weight:600}
-.box.def{background:var(--soft-blue); border-color:#C5D8F0} .box.def .lab{background:var(--royal)}
-.box.thm{background:var(--soft-teal); border-color:#BEE0DE} .box.thm .lab{background:var(--teal)}
-.box.prop{background:var(--soft-green); border-color:#CAE3CD} .box.prop .lab{background:var(--forest)}
-.box.ex{background:var(--soft-amber); border-color:#EAD9B0} .box.ex .lab{background:var(--amber)}
-.box.note{background:var(--soft-wine); border-color:#EBC9D1; border-left:4px solid var(--wine)} .box.note .lab{background:var(--wine)}
-.box .sol{margin-top:8px; padding-top:8px; border-top:1px dashed rgba(0,0,0,.13)}
-.box .sol .st{color:var(--teal); font-style:italic; font-weight:600}
-.katex{font-size:1.04em}
-.katex-display{margin:.7em 0; overflow-x:auto; overflow-y:hidden; padding:2px 0}
-
-.markdone{display:flex; align-items:center; gap:12px; margin-top:30px; padding-top:20px; border-top:1px solid var(--line)}
-.lesson-nav{display:flex; justify-content:space-between; margin-top:18px; gap:10px}
-.lesson-nav button{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 16px; cursor:pointer;
-  font-size:13.5px; font-weight:600; color:var(--ink); transition:.13s}
-.lesson-nav button:hover:not(:disabled){border-color:var(--teal); color:var(--teal)}
-.lesson-nav button:disabled{opacity:.4; cursor:default}
-
-/* ---------- Flashcards ---------- */
-.fc-stage{max-width:620px; margin:0 auto}
-.fc-meta{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; color:var(--muted); font-size:13px}
-.fc-meta .tag{background:var(--soft-blue); color:var(--royal); padding:4px 11px; border-radius:20px; font-weight:600; font-size:12px}
-.flashcard{background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
-  min-height:280px; display:flex; flex-direction:column; padding:30px 34px; cursor:pointer; position:relative}
-.flashcard .side-label{font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); font-weight:700}
-.flashcard .body{flex:1; display:flex; flex-direction:column; justify-content:center; font-size:17px; text-align:center}
-.flashcard .body.q{font-family:"Spectral",serif; color:var(--ink)}
-.flashcard .hint{text-align:center; color:var(--faint); font-size:12.5px; margin-top:10px}
-.fc-rate{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px}
-.fc-rate button{border:0; border-radius:11px; padding:13px 8px; cursor:pointer; font-weight:600; font-size:13.5px; color:#fff; transition:.13s;
-  display:flex; flex-direction:column; align-items:center; gap:2px}
-.fc-rate button small{font-weight:500; font-size:11px; opacity:.85}
-.fc-rate button:hover{transform:translateY(-2px); filter:brightness(1.05)}
-.fc-rate .again{background:var(--wine)} .fc-rate .hard{background:var(--amber)}
-.fc-rate .good{background:var(--teal)} .fc-rate .easy{background:var(--forest)}
-.fc-empty{text-align:center; padding:60px 20px; color:var(--muted)}
-.fc-empty .big{font-family:"Spectral",serif; font-size:46px; color:var(--forest)}
-.deckpick{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:20px}
-.deckpick button{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:7px 15px; cursor:pointer;
-  font-size:13px; font-weight:600; color:var(--muted); transition:.13s}
-.deckpick button.on{background:var(--ink); color:#fff; border-color:var(--ink)}
-.deckpick button:hover:not(.on){border-color:var(--teal)}
-
-/* ---------- Quiz ---------- */
-.quiz-stage{max-width:680px; margin:0 auto}
-.qprog{height:6px; background:var(--soft-gray); border-radius:4px; overflow:hidden; margin-bottom:22px}
-.qprog i{display:block; height:100%; background:var(--amber); transition:width .3s}
-.qcard{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:26px 28px; box-shadow:var(--shadow-sm)}
-.qnum{font-size:12px; letter-spacing:.04em; color:var(--amber); font-weight:700; text-transform:uppercase}
-.qtext{font-family:"Spectral",serif; font-size:19px; color:var(--ink); margin:8px 0 20px; line-height:1.45}
-.opt{display:flex; align-items:center; gap:13px; width:100%; text-align:left; background:var(--panel);
-  border:1.5px solid var(--line); border-radius:12px; padding:13px 16px; margin-bottom:11px; cursor:pointer; font-size:15px; transition:.13s; color:var(--text)}
-.opt:hover:not(:disabled){border-color:var(--teal); background:var(--soft-teal)}
-.opt .key{width:27px; height:27px; flex-shrink:0; border-radius:8px; background:var(--soft-gray); color:var(--muted);
-  font-weight:700; display:flex; align-items:center; justify-content:center; font-size:14px}
-.opt.correct{border-color:var(--forest); background:var(--soft-green)} .opt.correct .key{background:var(--forest); color:#fff}
-.opt.wrong{border-color:var(--wine); background:var(--soft-wine)} .opt.wrong .key{background:var(--wine); color:#fff}
-.opt:disabled{cursor:default}
-.explain{margin-top:8px; background:var(--soft-blue); border-radius:11px; padding:14px 16px; font-size:14px; border-left:3px solid var(--royal)}
-.explain .et{font-weight:700; color:var(--royal); font-size:12px; text-transform:uppercase; letter-spacing:.05em}
-.quiz-foot{display:flex; justify-content:space-between; align-items:center; margin-top:18px}
-.scoreboard{text-align:center; padding:30px 20px}
-.scoreboard .ring{font-family:"Spectral",serif; font-size:64px; font-weight:700; color:var(--ink)}
-.scoreboard .msg{font-size:16px; color:var(--muted); margin:6px 0 22px}
-
-/* ---------- Tools ---------- */
-.tooltabs{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap}
-.tooltabs button{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 18px; cursor:pointer;
-  font-weight:600; font-size:13.5px; color:var(--muted); transition:.13s}
-.tooltabs button.on{background:var(--teal); color:#fff; border-color:var(--teal)}
-.calc{display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start}
-.calc .field{margin-bottom:16px}
-.calc label{display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:6px}
-.calc input,.calc select{width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:10px; font-size:15px;
-  font-family:inherit; color:var(--text); background:var(--panel)}
-.calc input:focus,.calc select:focus{outline:0; border-color:var(--teal)}
-.result{background:var(--ink); color:#fff; border-radius:14px; padding:20px 22px}
-.result .rk{font-size:12px; color:#9DB6D6; font-weight:600; letter-spacing:.03em}
-.result .rv{font-family:"Spectral",serif; font-size:38px; font-weight:700; line-height:1.1; margin-top:4px; font-variant-numeric:tabular-nums}
-.result .rextra{font-size:13px; color:#A9C0DE; margin-top:8px}
-.stattable{width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums}
-.statable-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px}
-.statable-wrap table{width:100%; border-collapse:collapse}
-.statable-wrap th,.statable-wrap td{padding:7px 10px; text-align:center; border-bottom:1px solid var(--line2)}
-.statable-wrap th{background:var(--soft-gray); color:var(--ink); font-weight:700; position:sticky; top:0}
-.statable-wrap tr:hover td{background:var(--soft-amber)}
-.statable-wrap td.dfc{font-weight:700; color:var(--royal); background:var(--soft-blue)}
-.hl{background:var(--amber)!important; color:#fff!important; border-radius:5px}
-.toolnote{font-size:13px; color:var(--muted); margin-top:16px; background:var(--soft-gray); padding:13px 16px; border-radius:10px}
-
-/* ---------- misc ---------- */
-.empty{text-align:center; color:var(--muted); padding:40px}
-@media (max-width:860px){
-  .sidebar{display:none}
-  .topbar{display:flex; align-items:center; gap:14px; background:var(--ink); color:#fff; padding:12px 16px; position:sticky; top:0; z-index:40}
-  .topbar h1{font-family:"Spectral",serif; font-size:17px; margin:0; font-weight:600; flex:1}
-  .topbar .menu{background:rgba(255,255,255,.12); border:0; color:#fff; width:38px; height:38px; border-radius:9px; font-size:19px; cursor:pointer}
-  .drawer{position:fixed; inset:0; z-index:60; display:none}
-  .drawer.open{display:block}
-  .drawer .scrim{position:absolute; inset:0; background:rgba(8,20,40,.5)}
-  .drawer .panel-d{position:absolute; left:0; top:0; bottom:0; width:270px; background:var(--ink); overflow-y:auto}
-  .content{padding:20px 16px 60px}
-  .lessons-layout{flex-direction:column}
-  .chaplist{width:100%; position:static}
-  .calc{grid-template-columns:1fr}
-  .hero{padding:24px}
-  .view-title{font-size:25px}
+.hero::after{
+  content:""; position:absolute; right:-120px; top:-120px;
+  width:420px; height:420px; border-radius:50%;
+  background:radial-gradient(circle at center, rgba(31,78,140,.45), transparent 70%);
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+.hero-in{max-width:1040px; margin:0 auto; position:relative; z-index:1}
+.eyebrow{
+  font-size:11px; letter-spacing:.24em; text-transform:uppercase;
+  color:#8FA6C4; font-weight:600;
+}
+.hero h1{
+  font-family:"Spectral",Georgia,serif; font-weight:600;
+  font-size:clamp(34px,6vw,56px); line-height:1.08; margin:14px 0 0;
+  letter-spacing:-.01em;
+}
+.hero h1 em{font-style:italic; color:#9DBDE8}
+.hero p{
+  max-width:560px; margin:18px 0 0; color:#B9C6DA;
+  font-size:16px; line-height:1.65;
+}
+
+/* grid */
+.wrap{
+  max-width:1040px; margin:-56px auto 0; padding:0 24px 64px;
+  position:relative; z-index:2; flex:1;
+}
+.sec-label{
+  font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--faint); font-weight:600; margin:8px 2px 16px;
+}
+.grid{
+  display:grid; gap:18px;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+}
+.card{
+  display:flex; flex-direction:column; gap:0;
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:var(--r); padding:22px 22px 20px;
+  box-shadow:var(--shadow); text-decoration:none; color:inherit;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+a.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 4px 10px rgba(20,49,91,.06),0 18px 44px rgba(20,49,91,.12);
+  border-color:#C2D0E4;
+}
+.card .ico{
+  width:46px; height:46px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; margin-bottom:16px;
+}
+.card h2{
+  font-family:"Spectral",Georgia,serif; font-weight:600;
+  font-size:20px; margin:0 0 6px; color:var(--ink);
+}
+.card .desc{color:var(--muted); font-size:14px; line-height:1.55; flex:1}
+.card .foot{
+  margin-top:16px; display:flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:600;
+}
+.card.live .foot{color:var(--royal)}
+.card.live .ico{background:var(--soft-blue); color:var(--royal)}
+.tag{
+  font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+  font-weight:700; padding:3px 9px; border-radius:999px;
+}
+.tag.live{background:var(--soft-green); color:var(--forest)}
+.tag.soon{background:var(--soft-gray); color:var(--faint)}
+
+/* soon variants */
+.card.soon{opacity:.92; cursor:default}
+.card.soon .ico{background:var(--soft-gray); color:var(--faint)}
+.card.soon h2{color:#3C4A5C}
+.card.soon .foot{color:var(--faint)}
+.card.soon.teal .ico{background:var(--soft-teal); color:var(--teal)}
+.card.soon.amber .ico{background:var(--soft-amber); color:var(--amber)}
+.card.soon.wine .ico{background:var(--soft-wine); color:var(--wine)}
+
+footer{
+  border-top:1px solid var(--line2); background:var(--panel);
+  padding:22px 24px; text-align:center; color:var(--faint); font-size:13px;
+}
+footer a{color:var(--muted)}
 </style>
 
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="eyebrow">Giáo trình</div>
-      <h1>Xác suất<br>& Thống kê</h1>
-      <div class="sub">Học · ôn · tự kiểm tra</div>
-    </div>
-    <nav class="nav" id="nav"></nav>
-    <div class="side-foot">
-      Tiến độ được lưu tự động trên thiết bị này.
-      <br><button id="resetBtn">Đặt lại toàn bộ tiến độ</button>
-    </div>
-  </aside>
-
-  <div class="main">
-    <div class="topbar">
-      <button class="menu" id="menuBtn">☰</button>
-      <h1 id="mobileTitle">Tổng quan</h1>
-    </div>
-    <div class="content" id="content"></div>
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Nền tảng học Toán</div>
+    <h1 class="serif">Học Toán, từ <em>nền tảng</em><br>đến thành thạo</h1>
+    <p>Mỗi chủ đề là một giáo trình hoàn chỉnh: bài học, công thức, thẻ ghi nhớ và trắc nghiệm tự kiểm tra. Tiến độ được lưu ngay trên thiết bị của bạn.</p>
   </div>
 </div>
 
-<div class="drawer" id="drawer">
-  <div class="scrim" id="scrim"></div>
-  <div class="panel-d">
-    <div class="brand">
-      <div class="eyebrow">Giáo trình</div>
-      <h1 class="serif" style="color:#fff;font-size:20px;margin:5px 0 0">Xác suất & Thống kê</h1>
+<div class="wrap">
+  <div class="sec-label">Chủ đề</div>
+  <div class="grid">
+
+    <a class="card live" href="xac-suat-thong-ke.html">
+      <div class="ico">∑</div>
+      <h2>Xác suất &amp; Thống kê</h2>
+      <div class="desc">Biến cố, xác suất, biến ngẫu nhiên, phân phối, ước lượng và kiểm định giả thuyết — kèm công cụ tra cứu Φ(z), tổ hợp, bảng phân phối.</div>
+      <div class="foot"><span class="tag live">Đang mở</span><span>Vào học →</span></div>
+    </a>
+
+    <div class="card soon teal">
+      <div class="ico">x²</div>
+      <h2>Đại số</h2>
+      <div class="desc">Phương trình, bất phương trình, hàm số, đa thức, ma trận và hệ phương trình tuyến tính.</div>
+      <div class="foot"><span class="tag soon">Sắp ra mắt</span></div>
     </div>
-    <nav class="nav" id="navMobile"></nav>
+
+    <div class="card soon amber">
+      <div class="ico">∫</div>
+      <h2>Giải tích</h2>
+      <div class="desc">Giới hạn, đạo hàm, tích phân, chuỗi và ứng dụng trong tối ưu hóa.</div>
+      <div class="foot"><span class="tag soon">Sắp ra mắt</span></div>
+    </div>
+
+    <div class="card soon wine">
+      <div class="ico">△</div>
+      <h2>Hình học</h2>
+      <div class="desc">Hình học phẳng, không gian, lượng giác và hình học giải tích.</div>
+      <div class="foot"><span class="tag soon">Sắp ra mắt</span></div>
+    </div>
+
   </div>
 </div>
 
-<script>
-/* ============================================================
-   MATH (computed live in-browser)
-   ============================================================ */
-function erf(x){
-  const s=x<0?-1:1; x=Math.abs(x);
-  const t=1/(1+0.3275911*x);
-  const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);
-  return s*y;
-}
-function normPDF(z){return Math.exp(-z*z/2)/Math.sqrt(2*Math.PI);}
-function normCDF(z){return 0.5*(1+erf(z/Math.SQRT2));}
-// Acklam inverse normal
-function normInv(p){
-  if(p<=0)return -Infinity; if(p>=1)return Infinity;
-  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
-  const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
-  const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
-  const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
-  const pl=0.02425, ph=1-pl; let q,r;
-  if(p<pl){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
-  if(p<=ph){q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
-  q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
-}
-function fact(n){let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
-function nCr(n,k){if(k<0||k>n)return 0;k=Math.min(k,n-k);let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r);}
-function nPr(n,k){if(k<0||k>n)return 0;let r=1;for(let i=0;i<k;i++)r*=(n-i);return r;}
-
-/* ============================================================
-   STATS TABLES (precomputed with scipy)
-   ============================================================ */
-const STATS = {"t_alphas": [0.1, 0.05, 0.025, 0.01, 0.005], "t_table": {"1": [3.078, 6.314, 12.706, 31.821, 63.657], "2": [1.886, 2.92, 4.303, 6.965, 9.925], "3": [1.638, 2.353, 3.182, 4.541, 5.841], "4": [1.533, 2.132, 2.776, 3.747, 4.604], "5": [1.476, 2.015, 2.571, 3.365, 4.032], "6": [1.44, 1.943, 2.447, 3.143, 3.707], "7": [1.415, 1.895, 2.365, 2.998, 3.499], "8": [1.397, 1.86, 2.306, 2.896, 3.355], "9": [1.383, 1.833, 2.262, 2.821, 3.25], "10": [1.372, 1.812, 2.228, 2.764, 3.169], "11": [1.363, 1.796, 2.201, 2.718, 3.106], "12": [1.356, 1.782, 2.179, 2.681, 3.055], "13": [1.35, 1.771, 2.16, 2.65, 3.012], "14": [1.345, 1.761, 2.145, 2.624, 2.977], "15": [1.341, 1.753, 2.131, 2.602, 2.947], "16": [1.337, 1.746, 2.12, 2.583, 2.921], "17": [1.333, 1.74, 2.11, 2.567, 2.898], "18": [1.33, 1.734, 2.101, 2.552, 2.878], "19": [1.328, 1.729, 2.093, 2.539, 2.861], "20": [1.325, 1.725, 2.086, 2.528, 2.845], "21": [1.323, 1.721, 2.08, 2.518, 2.831], "22": [1.321, 1.717, 2.074, 2.508, 2.819], "23": [1.319, 1.714, 2.069, 2.5, 2.807], "24": [1.318, 1.711, 2.064, 2.492, 2.797], "25": [1.316, 1.708, 2.06, 2.485, 2.787], "26": [1.315, 1.706, 2.056, 2.479, 2.779], "27": [1.314, 1.703, 2.052, 2.473, 2.771], "28": [1.313, 1.701, 2.048, 2.467, 2.763], "29": [1.311, 1.699, 2.045, 2.462, 2.756], "30": [1.31, 1.697, 2.042, 2.457, 2.75], "40": [1.303, 1.684, 2.021, 2.423, 2.704], "60": [1.296, 1.671, 2.0, 2.39, 2.66], "120": [1.289, 1.658, 1.98, 2.358, 2.617]}, "chi_alphas": [0.995, 0.975, 0.95, 0.05, 0.025, 0.01], "chi_table": {"1": [0.0, 0.001, 0.004, 3.841, 5.024, 6.635], "2": [0.01, 0.051, 0.103, 5.991, 7.378, 9.21], "3": [0.072, 0.216, 0.352, 7.815, 9.348, 11.345], "4": [0.207, 0.484, 0.711, 9.488, 11.143, 13.277], "5": [0.412, 0.831, 1.145, 11.07, 12.833, 15.086], "6": [0.676, 1.237, 1.635, 12.592, 14.449, 16.812], "7": [0.989, 1.69, 2.167, 14.067, 16.013, 18.475], "8": [1.344, 2.18, 2.733, 15.507, 17.535, 20.09], "9": [1.735, 2.7, 3.325, 16.919, 19.023, 21.666], "10": [2.156, 3.247, 3.94, 18.307, 20.483, 23.209], "11": [2.603, 3.816, 4.575, 19.675, 21.92, 24.725], "12": [3.074, 4.404, 5.226, 21.026, 23.337, 26.217], "13": [3.565, 5.009, 5.892, 22.362, 24.736, 27.688], "14": [4.075, 5.629, 6.571, 23.685, 26.119, 29.141], "15": [4.601, 6.262, 7.261, 24.996, 27.488, 30.578], "16": [5.142, 6.908, 7.962, 26.296, 28.845, 32.0], "17": [5.697, 7.564, 8.672, 27.587, 30.191, 33.409], "18": [6.265, 8.231, 9.39, 28.869, 31.526, 34.805], "19": [6.844, 8.907, 10.117, 30.144, 32.852, 36.191], "20": [7.434, 9.591, 10.851, 31.41, 34.17, 37.566], "21": [8.034, 10.283, 11.591, 32.671, 35.479, 38.932], "22": [8.643, 10.982, 12.338, 33.924, 36.781, 40.289], "23": [9.26, 11.689, 13.091, 35.172, 38.076, 41.638], "24": [9.886, 12.401, 13.848, 36.415, 39.364, 42.98], "25": [10.52, 13.12, 14.611, 37.652, 40.646, 44.314], "26": [11.16, 13.844, 15.379, 38.885, 41.923, 45.642], "27": [11.808, 14.573, 16.151, 40.113, 43.195, 46.963], "28": [12.461, 15.308, 16.928, 41.337, 44.461, 48.278], "29": [13.121, 16.047, 17.708, 42.557, 45.722, 49.588], "30": [13.787, 16.791, 18.493, 43.773, 46.979, 50.892], "40": [20.707, 24.433, 26.509, 55.758, 59.342, 63.691], "50": [27.991, 32.357, 34.764, 67.505, 71.42, 76.154]}};
-
-/* ============================================================
-   STORAGE  (persists across sessions; falls back to memory)
-   ============================================================ */
-const mem={};
-async function sGet(k){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}catch(e){return (k in mem)?mem[k]:null;}}
-async function sSet(k,v){const s=JSON.stringify(v);mem[k]=v;try{await window.storage.set(k,s);}catch(e){}}
-
-let progress={learned:{}, srs:{}, quiz:{}};
-async function loadProgress(){
-  const p=await sGet('xstk_progress_v1');
-  if(p)progress=Object.assign({learned:{},srs:{},quiz:{}},p);
-}
-async function saveProgress(){await sSet('xstk_progress_v1',progress);}
-
-/* ============================================================
-   CONTENT  (the whole book, study edition)
-   math: \( inline \)  and  \[ display \]
-   ============================================================ */
-const R=String.raw;
-const CH=[
-{id:1,part:"PHẦN I · LÝ THUYẾT XÁC SUẤT",title:"Biến cố và xác suất",sections:[
- {t:"Phép thử và không gian mẫu",h:R`<p><b>Phép thử ngẫu nhiên</b> là một thí nghiệm mà ta không đoán trước được kết quả. Tập hợp mọi kết quả có thể là <b>không gian mẫu</b> \(\Omega\); mỗi phần tử là một <b>biến cố sơ cấp</b>.</p>
- <div class="box def"><span class="lab">Định nghĩa</span> <span class="ttl">Biến cố</span> là một tập con \(A\subset\Omega\). \(A\) <i>xảy ra</i> nếu kết quả phép thử thuộc \(A\). Biến cố chắc chắn \(\Omega\), biến cố không thể \(\varnothing\).</div>`},
- {t:"Phép toán trên biến cố",h:R`<ul><li>Hợp \(A\cup B\): ít nhất một xảy ra.</li><li>Giao \(A\cap B\): cả hai cùng xảy ra.</li><li>Đối \(\bar A=\Omega\setminus A\).</li><li>Xung khắc: \(A\cap B=\varnothing\).</li></ul>
- <div class="box thm"><span class="lab">Định lý</span> <span class="ttl">Luật De Morgan.</span> \[\overline{A\cup B}=\bar A\cap\bar B,\qquad \overline{A\cap B}=\bar A\cup\bar B.\]</div>`},
- {t:"Các định nghĩa xác suất",h:R`<div class="box def"><span class="lab">Cổ điển</span> Khi \(\Omega\) có \(n\) kết quả đồng khả năng: \[\P(A)=\frac{\text{số kết quả thuận lợi cho }A}{n}=\frac{|A|}{|\Omega|}.\]</div>
- <div class="box def"><span class="lab">Thống kê</span> \(\P(A)\approx f_n(A)=\dfrac{m}{n}\) (tần suất khi \(n\) lớn).</div>
- <div class="box def"><span class="lab">Hình học</span> \(\P(A)=\dfrac{\text{độ đo}(A)}{\text{độ đo}(\Omega)}\) (độ dài / diện tích / thể tích).</div>
- <div class="box def"><span class="lab">Tiên đề Kolmogorov</span> \(\P(A)\ge0\); \(\P(\Omega)=1\); với \(A_i\) đôi một xung khắc \(\P(\bigcup A_i)=\sum\P(A_i)\). Hệ quả: \(\P(\bar A)=1-\P(A)\).</div>`},
- {t:"Quy tắc cộng và nhân",h:R`<div class="box thm"><span class="lab">Định lý</span> <span class="ttl">Cộng xác suất.</span> \[\P(A\cup B)=\P(A)+\P(B)-\P(A\cap B).\] Nếu xung khắc thì \(\P(A\cup B)=\P(A)+\P(B)\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Rút 1 lá từ bộ 52 lá. \(\P(\text{Át hoặc Cơ})=\frac{4}{52}+\frac{13}{52}-\frac{1}{52}=\frac{16}{52}=\frac{4}{13}.\)</div>`},
- {t:"Xác suất có điều kiện và độc lập",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \[\P(A\mid B)=\frac{\P(A\cap B)}{\P(B)},\quad \P(B)>0.\] Suy ra <b>quy tắc nhân</b>: \(\P(A\cap B)=\P(B)\,\P(A\mid B)\).</div>
- <div class="box def"><span class="lab">Độc lập</span> \(A,B\) độc lập \(\iff \P(A\cap B)=\P(A)\P(B)\iff \P(A\mid B)=\P(A)\).</div>`},
- {t:"Công thức đầy đủ và Bayes",h:R`<p>Cho hệ đầy đủ \(B_1,\dots,B_n\) (xung khắc, hợp lại bằng \(\Omega\)).</p>
- <div class="box thm"><span class="lab">Xác suất đầy đủ</span> \[\P(A)=\sum_{i=1}^n \P(B_i)\,\P(A\mid B_i).\]</div>
- <div class="box thm"><span class="lab">Bayes</span> \[\P(B_k\mid A)=\frac{\P(B_k)\,\P(A\mid B_k)}{\sum_i \P(B_i)\,\P(A\mid B_i)}.\]</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Bệnh có tỉ lệ \(1\%\). Xét nghiệm đúng \(99\%\) ở người bệnh, dương tính giả \(5\%\). Nếu dương tính: \[\P(\text{bệnh}\mid +)=\frac{0{,}01\cdot0{,}99}{0{,}01\cdot0{,}99+0{,}99\cdot0{,}05}\approx0{,}167.\] Chỉ \(\sim17\%\) — trực giác thường đánh giá quá cao.</div>`},
- {t:"Dãy phép thử Bernoulli",h:R`<div class="box thm"><span class="lab">Công thức Bernoulli</span> \(n\) phép thử độc lập, mỗi lần \(A\) có xác suất \(p\): \[\P(\text{đúng }k\text{ lần})=\binom{n}{k}p^k(1-p)^{n-k}.\]</div>`}
-]},
-{id:2,part:"PHẦN I · LÝ THUYẾT XÁC SUẤT",title:"Đại lượng ngẫu nhiên rời rạc",sections:[
- {t:"ĐLNN và bảng phân bố",h:R`<div class="box def"><span class="lab">Định nghĩa</span> <b>ĐLNN rời rạc</b> \(X\) nhận hữu hạn/đếm được giá trị \(x_i\) với \(p_i=\P(X=x_i)\ge0,\ \sum p_i=1\). Đây là <b>bảng phân bố</b>.</div>
- <div class="box def"><span class="lab">Hàm phân bố</span> \(F(x)=\P(X<x)\), không giảm, \(F(-\infty)=0,\ F(+\infty)=1\).</div>`},
- {t:"Kỳ vọng, phương sai",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \[\E X=\sum_i x_i p_i,\quad \E g(X)=\sum_i g(x_i)p_i.\] \[\Var X=\E(X-\E X)^2=\E X^2-(\E X)^2,\quad \sigma=\sqrt{\Var X}.\]</div>
- <div class="box prop"><span class="lab">Tính chất</span> \(\E(aX+b)=a\E X+b\); \(\Var(aX+b)=a^2\Var X\). Nếu \(X,Y\) độc lập: \(\E(XY)=\E X\,\E Y,\ \Var(X+Y)=\Var X+\Var Y\).</div>`},
- {t:"Phân bố nhị thức",h:R`<div class="box def"><span class="lab">Nhị thức</span> \(X\sim B(n,p)\): \[\P(X=k)=\binom nk p^k(1-p)^{n-k},\quad \E X=np,\ \Var X=np(1-p).\]</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Gieo xúc xắc 5 lần, \(X\) = số lần ra mặt 6 \(\sim B(5,\tfrac16)\). \(\E X=5/6\approx0{,}83\).</div>`},
- {t:"Phân bố Poisson",h:R`<div class="box def"><span class="lab">Poisson</span> \(X\sim P(\lambda)\): \[\P(X=k)=\frac{\lambda^k e^{-\lambda}}{k!},\quad \E X=\Var X=\lambda.\] Dùng cho số biến cố hiếm trong khoảng thời gian/không gian cố định.</div>`},
- {t:"Hình học và siêu bội",h:R`<div class="box def"><span class="lab">Hình học</span> Số phép thử đến khi thành công đầu: \(\P(X=k)=q^{k-1}p,\ \E X=\tfrac1p,\ \Var X=\tfrac{q}{p^2}\).</div>
- <div class="box def"><span class="lab">Siêu bội</span> Lấy \(n\) từ \(N\) phần tử (có \(K\) "thành công") không hoàn lại: \[\P(X=k)=\frac{\binom Kk\binom{N-K}{n-k}}{\binom Nn},\quad \E X=n\frac KN.\]</div>`}
-]},
-{id:3,part:"PHẦN I · LÝ THUYẾT XÁC SUẤT",title:"Đại lượng ngẫu nhiên liên tục",sections:[
- {t:"Hàm mật độ và hàm phân bố",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \(X\) liên tục nếu có <b>mật độ</b> \(f(x)\ge0\) sao cho \(\P(a\le X\le b)=\int_a^b f\,dx\). \[F(x)=\int_{-\infty}^x f(t)\,dt,\quad f=F',\quad \int_{-\infty}^{\infty}f=1.\] Với \(X\) liên tục: \(\P(X=c)=0\).</div>`},
- {t:"Kỳ vọng và phương sai",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \[\E X=\int_{-\infty}^{\infty}x f(x)\,dx,\quad \Var X=\int x^2 f\,dx-(\E X)^2.\] Trung vị \(m_e\): \(F(m_e)=\tfrac12\).</div>`},
- {t:"Phân bố đều và mũ",h:R`<div class="box def"><span class="lab">Đều</span> \(X\sim U(a,b)\): \(f=\tfrac1{b-a}\) trên \([a,b]\); \(\E X=\tfrac{a+b}2,\ \Var X=\tfrac{(b-a)^2}{12}\).</div>
- <div class="box def"><span class="lab">Mũ</span> \(X\sim\mathrm{Exp}(\lambda)\): \(f=\lambda e^{-\lambda x}\,(x\ge0)\); \(F=1-e^{-\lambda x}\); \(\E X=\tfrac1\lambda,\ \Var X=\tfrac1{\lambda^2}\). Tính "không nhớ".</div>`},
- {t:"Phân bố chuẩn",h:R`<div class="box def"><span class="lab">Chuẩn</span> \(X\sim N(\mu,\sigma^2)\): \[f(x)=\frac1{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}},\quad \E X=\mu,\ \Var X=\sigma^2.\] Chuẩn hóa \(Z=\frac{X-\mu}\sigma\sim N(0,1)\), \(\Phi(z)=\P(Z<z)\) (tra ở mục Công cụ).</div>
- <div class="box thm"><span class="lab">Quy tắc 3σ</span> \(\P(|X-\mu|<\sigma)\approx0{,}683\); \(<2\sigma\approx0{,}955\); \(<3\sigma\approx0{,}997\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> \(X\sim N(168,6^2)\). \(\P(162<X<180)=\Phi(2)-\Phi(-1)=0{,}9772-0{,}1587=0{,}8185\).</div>`},
- {t:"Khi bình phương, Student, Fisher",h:R`<div class="box def"><span class="lab">χ²</span> \(\chi^2=\sum_{i=1}^n Z_i^2\sim\chi^2(n)\), \(\E=n,\ \Var=2n\).</div>
- <div class="box def"><span class="lab">Student t</span> \(T=\dfrac{Z}{\sqrt{V/n}}\sim t(n)\) với \(Z\sim N(0,1),V\sim\chi^2(n)\). Đối xứng, \(n\to\infty\Rightarrow N(0,1)\).</div>
- <div class="box def"><span class="lab">Fisher F</span> \(F=\dfrac{U/m}{V/n}\sim F(m,n)\) — so sánh hai phương sai.</div>`}
-]},
-{id:4,part:"PHẦN I · LÝ THUYẾT XÁC SUẤT",title:"Vector ngẫu nhiên",sections:[
- {t:"Phân bố đồng thời và biên",h:R`<div class="box def"><span class="lab">Đồng thời</span> Rời rạc \(p_{ij}=\P(X=x_i,Y=y_j)\); liên tục mật độ \(f(x,y)\), \(\iint f=1\).</div>
- <div class="box def"><span class="lab">Biên</span> \(p_{i\bullet}=\sum_j p_{ij}\); \(f_X(x)=\int f(x,y)\,dy\).</div>`},
- {t:"Độc lập",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \(X,Y\) độc lập \(\iff f(x,y)=f_X(x)f_Y(y)\) (rời rạc: \(p_{ij}=p_{i\bullet}p_{\bullet j}\)).</div>`},
- {t:"Hiệp phương sai và tương quan",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \[\cov(X,Y)=\E(XY)-\E X\,\E Y,\qquad \rho=\frac{\cov(X,Y)}{\sqrt{\Var X\,\Var Y}}\in[-1,1].\]</div>
- <div class="box note"><span class="lab">Chú ý</span> Độc lập \(\Rightarrow \rho=0\), nhưng \(\rho=0\) <b>không</b> suy ra độc lập (trừ trường hợp chuẩn nhiều chiều).</div>
- <div class="box prop"><span class="lab">Tính chất</span> \(\Var(X+Y)=\Var X+\Var Y+2\cov(X,Y)\).</div>`},
- {t:"Có điều kiện & chuẩn nhiều chiều",h:R`<div class="box def"><span class="lab">Có điều kiện</span> \(f_{Y\mid X}(y\mid x)=\dfrac{f(x,y)}{f_X(x)}\); \(\E(Y\mid X=x)=\int y\,f_{Y\mid X}\,dy\).</div>
- <div class="box thm"><span class="lab">Kỳ vọng toàn phần</span> \(\E Y=\E[\E(Y\mid X)]\).</div>
- <div class="box prop"><span class="lab">Chuẩn 2 chiều</span> Với vector chuẩn, <b>không tương quan \(\Rightarrow\) độc lập</b>.</div>`}
-]},
-{id:5,part:"PHẦN I · LÝ THUYẾT XÁC SUẤT",title:"Luật số lớn & Định lý giới hạn",sections:[
- {t:"Bất đẳng thức Markov, Chebyshev",h:R`<div class="box thm"><span class="lab">Markov</span> \(X\ge0\): \(\P(X\ge a)\le\dfrac{\E X}{a}\).</div>
- <div class="box thm"><span class="lab">Chebyshev</span> \[\P(|X-\mu|\ge\varepsilon)\le\frac{\sigma^2}{\varepsilon^2}.\]</div>`},
- {t:"Luật số lớn",h:R`<div class="box thm"><span class="lab">LLN</span> \(X_i\) độc lập cùng phân bố, \(\E X=\mu\): trung bình mẫu \(\overline X_n\xrightarrow{\P}\mu\).</div>
- <div class="box note"><span class="lab">Nhận xét</span> Luật Bernoulli: tần suất \(f_n=\tfrac mn\to p\) — cơ sở cho định nghĩa thống kê của xác suất.</div>`},
- {t:"Định lý giới hạn trung tâm",h:R`<div class="box thm"><span class="lab">CLT</span> \(X_i\) độc lập cùng phân bố, \(\E X=\mu,\Var X=\sigma^2\): \[Z_n=\frac{\overline X_n-\mu}{\sigma/\sqrt n}\xrightarrow{d} N(0,1).\] Với \(n\) lớn: \(\overline X_n\approx N(\mu,\sigma^2/n),\ S_n\approx N(n\mu,n\sigma^2)\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> 100 kiện, \(\mu=50,\sigma=5\): \(S\approx N(5000,2500)\). \(\P(S>5100)=1-\Phi(2)=0{,}0228\).</div>`},
- {t:"Xấp xỉ nhị thức",h:R`<div class="box thm"><span class="lab">Poisson</span> \(n\) lớn, \(p\) nhỏ: \(B(n,p)\approx P(\lambda),\ \lambda=np\).</div>
- <div class="box thm"><span class="lab">Moivre–Laplace</span> \(np,n(1-p)\ge5\): \(B(n,p)\approx N(np,np(1-p))\), nhớ hiệu chỉnh liên tục \(\pm0{,}5\).</div>`}
-]},
-{id:6,part:"PHẦN II · THỐNG KÊ TOÁN HỌC",title:"Thống kê mô tả",sections:[
- {t:"Tổng thể, mẫu, tần số",h:R`<p><b>Tổng thể</b>: toàn bộ đối tượng. <b>Mẫu</b> cỡ \(n\): bộ phận quan sát được. Tần số \(n_i\), tần suất \(f_i=n_i/n\).</p>`},
- {t:"Đặc trưng vị trí trung tâm",h:R`<div class="box def"><span class="lab">Trung bình</span> \(\overline x=\dfrac1n\sum x_i\).</div>
- <div class="box def"><span class="lab">Trung vị · Mốt</span> \(M_e\) = giá trị giữa khi sắp xếp; \(M_o\) = giá trị tần số lớn nhất.</div>
- <div class="box note"><span class="lab">Nhận xét</span> Trung vị bền với giá trị ngoại lai hơn trung bình.</div>`},
- {t:"Đặc trưng độ phân tán",h:R`<div class="box def"><span class="lab">Phương sai mẫu</span> \[s^2=\frac1{n-1}\sum(x_i-\overline x)^2=\frac1{n-1}\Big(\sum x_i^2-n\overline x^2\Big),\quad s=\sqrt{s^2}.\]</div>
- <div class="box def"><span class="lab">Khác</span> Khoảng biến thiên \(R=x_{\max}-x_{\min}\); hệ số biến thiên \(CV=\tfrac s{\overline x}\cdot100\%\); khoảng tứ phân vị \(IQR=Q_3-Q_1\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Mẫu \(4,7,7,9,10,13\): \(\overline x\approx8{,}33,\ M_e=8,\ M_o=7,\ s^2\approx9{,}47\).</div>`}
-]},
-{id:7,part:"PHẦN II · THỐNG KÊ TOÁN HỌC",title:"Mẫu và phân bố mẫu",sections:[
- {t:"Mẫu ngẫu nhiên và thống kê",h:R`<div class="box def"><span class="lab">Định nghĩa</span> Mẫu ngẫu nhiên \((X_1,\dots,X_n)\): độc lập cùng phân bố với tổng thể. Thống kê \(T=g(X_1,\dots,X_n)\) cũng là ĐLNN — có <b>phân bố mẫu</b>.</div>`},
- {t:"Phân bố của trung bình mẫu",h:R`<div class="box thm"><span class="lab">Định lý</span> \(\E\overline X=\mu,\ \Var\overline X=\dfrac{\sigma^2}n\) (sai số chuẩn \(\sigma/\sqrt n\)). Tổng thể chuẩn \(\Rightarrow \overline X\sim N(\mu,\sigma^2/n)\); nói chung \(n\) lớn \(\Rightarrow\) xấp xỉ chuẩn (CLT).</div>
- <div class="box note"><span class="lab">Nhận xét</span> Muốn giảm sai số chuẩn một nửa cần tăng cỡ mẫu 4 lần.</div>`},
- {t:"Các định lý phân bố mẫu (tổng thể chuẩn)",h:R`<div class="box thm"><span class="lab">Phương sai</span> \(\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)\); \(\overline X\) và \(S^2\) độc lập.</div>
- <div class="box thm"><span class="lab">Student</span> \(\sigma\) chưa biết: \(T=\dfrac{\overline X-\mu}{S/\sqrt n}\sim t(n-1)\).</div>
- <div class="box thm"><span class="lab">Tỉ lệ</span> \(n\) lớn: \(\hat p\approx N\!\big(p,\tfrac{p(1-p)}n\big)\).</div>`}
-]},
-{id:8,part:"PHẦN II · THỐNG KÊ TOÁN HỌC",title:"Ước lượng tham số",sections:[
- {t:"Tiêu chuẩn ước lượng",h:R`<div class="box def"><span class="lab">Định nghĩa</span> Không chệch \(\E\hat\theta=\theta\); hiệu quả = phương sai nhỏ nhất; vững \(\hat\theta\xrightarrow{\P}\theta\).</div>
- <div class="box prop"><span class="lab">Quen thuộc</span> \(\overline X\) không chệch & vững cho \(\mu\); \(S^2\) không chệch cho \(\sigma^2\) (lý do chia \(n-1\)); \(\hat p=m/n\) cho \(p\).</div>`},
- {t:"Phương pháp moment và MLE",h:R`<div class="box def"><span class="lab">Moment</span> Cho moment lý thuyết = moment mẫu rồi giải \(\theta\).</div>
- <div class="box def"><span class="lab">MLE</span> Cực đại hàm hợp lí \(L(\theta)=\prod f(x_i;\theta)\) (thường qua \(\ln L\)).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Bernoulli: \(\ln L=m\ln p+(n-m)\ln(1-p)\Rightarrow \hat p=m/n\).</div>`},
- {t:"Khoảng tin cậy cho trung bình",h:R`<div class="box thm"><span class="lab">σ biết</span> \[\overline x\pm z_{\alpha/2}\,\frac{\sigma}{\sqrt n},\quad z_{0{,}025}=1{,}96,\ z_{0{,}005}=2{,}576.\]</div>
- <div class="box thm"><span class="lab">σ chưa biết</span> \[\overline x\pm t_{\alpha/2}(n-1)\,\frac{s}{\sqrt n}.\]</div>
- <div class="box ex"><span class="lab">Ví dụ</span> \(n=25,\overline x=20{,}1,s=0{,}4\): \(20{,}1\pm2{,}064\cdot0{,}08=(19{,}94;20{,}27)\).</div>`},
- {t:"KTC cho tỉ lệ, phương sai · cỡ mẫu",h:R`<div class="box thm"><span class="lab">Tỉ lệ</span> \(\hat p\pm z_{\alpha/2}\sqrt{\tfrac{\hat p(1-\hat p)}n}\).</div>
- <div class="box thm"><span class="lab">Phương sai</span> \(\Big(\dfrac{(n-1)s^2}{\chi^2_{\alpha/2}},\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2}}\Big)\).</div>
- <div class="box thm"><span class="lab">Cỡ mẫu</span> \(n\ge\big(\tfrac{z_{\alpha/2}\sigma}E\big)^2\); cho tỉ lệ \(n\ge\dfrac{z_{\alpha/2}^2\hat p(1-\hat p)}{E^2}\) (xấu nhất \(\hat p=0{,}5\)).</div>`}
-]},
-{id:9,part:"PHẦN II · THỐNG KÊ TOÁN HỌC",title:"Kiểm định giả thuyết",sections:[
- {t:"Khái niệm cơ bản",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \(H_0\) (giả thuyết không) vs \(H_1\) (đối thuyết). Sai lầm loại I (bác bỏ \(H_0\) đúng) xác suất \(\alpha\) = mức ý nghĩa; loại II (chấp nhận \(H_0\) sai) xác suất \(\beta\); lực kiểm định \(1-\beta\).</div>
- <div class="box note"><span class="lab">Chú ý</span> \(p\text{-value}<\alpha\Rightarrow\) bác bỏ \(H_0\). "Không bác bỏ" \(\ne\) "\(H_0\) đúng".</div>`},
- {t:"Kiểm định trung bình",h:R`<div class="box thm"><span class="lab">Z / t</span> \(\sigma\) biết: \(Z=\dfrac{\overline x-\mu_0}{\sigma/\sqrt n}\); chưa biết: \(T=\dfrac{\overline x-\mu_0}{s/\sqrt n}\sim t(n-1)\). Hai phía: bác bỏ nếu \(|Z|>z_{\alpha/2}\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> \(\mu_0=1000,n=25,\overline x=970,s=50\): \(T=-3<-t_{0{,}05}(24)=-1{,}711\Rightarrow\) bác bỏ.</div>`},
- {t:"Tỉ lệ, phương sai, hai mẫu",h:R`<div class="box thm"><span class="lab">Tỉ lệ</span> \(Z=\dfrac{\hat p-p_0}{\sqrt{p_0(1-p_0)/n}}\).</div>
- <div class="box thm"><span class="lab">Phương sai</span> \(\chi^2=\dfrac{(n-1)s^2}{\sigma_0^2}\sim\chi^2(n-1)\).</div>
- <div class="box thm"><span class="lab">Hai trung bình</span> \(Z=\dfrac{\overline x_1-\overline x_2}{\sqrt{\sigma_1^2/n_1+\sigma_2^2/n_2}}\).</div>`},
- {t:"Kiểm định χ²",h:R`<div class="box thm"><span class="lab">Phù hợp</span> \(\chi^2=\sum\dfrac{(O_i-E_i)^2}{E_i}\sim\chi^2(k-1-r)\).</div>
- <div class="box thm"><span class="lab">Độc lập</span> Bảng \(r\times c\): \(\chi^2=\sum\dfrac{(O_{ij}-E_{ij})^2}{E_{ij}}\sim\chi^2((r-1)(c-1))\), \(E_{ij}=\dfrac{\text{hàng}_i\cdot\text{cột}_j}{n}\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Xúc xắc 120 lần: \(\chi^2=2{,}0<\chi^2_{0{,}05}(5)=11{,}07\Rightarrow\) cân đối.</div>`}
-]},
-{id:10,part:"PHẦN II · THỐNG KÊ TOÁN HỌC",title:"Tương quan và hồi quy",sections:[
- {t:"Hệ số tương quan mẫu",h:R`<div class="box def"><span class="lab">Định nghĩa</span> \[r=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}},\ S_{xy}=\sum x_iy_i-n\overline x\,\overline y,\ S_{xx}=\sum x_i^2-n\overline x^2.\] \(-1\le r\le1\).</div>
- <div class="box note"><span class="lab">Chú ý</span> Tương quan \(\ne\) nhân quả; \(r=0\) chỉ là không có liên hệ <i>tuyến tính</i>.</div>`},
- {t:"Hồi quy tuyến tính đơn",h:R`<div class="box thm"><span class="lab">Bình phương tối thiểu</span> \(\hat y=a+bx\) với \[b=\frac{S_{xy}}{S_{xx}},\quad a=\overline y-b\overline x.\] Đường hồi quy qua \((\overline x,\overline y)\); \(b=r\dfrac{s_y}{s_x}\).</div>
- <div class="box ex"><span class="lab">Ví dụ</span> \(x:1..5,\ y:3,4,6,7,8\Rightarrow \hat y=1{,}7+1{,}3x\); dự báo \(x=6\Rightarrow9{,}5\).</div>`},
- {t:"Đánh giá và dự báo",h:R`<div class="box def"><span class="lab">R²</span> \(R^2=r^2\in[0,1]\): tỉ lệ biến thiên của \(y\) được mô hình giải thích.</div>
- <div class="box thm"><span class="lab">Kiểm định hệ số góc</span> \(T=\dfrac{b}{s_e/\sqrt{S_{xx}}}\sim t(n-2)\), \(s_e^2=\dfrac{S_{yy}-bS_{xy}}{n-2}\).</div>
- <div class="box note"><span class="lab">Nhận xét</span> Ngoại suy ngoài khoảng dữ liệu là rủi ro.</div>`}
-]},
-{id:11,part:"PHỤ LỤC",title:"Giải tích tổ hợp",sections:[
- {t:"Quy tắc đếm",h:R`<div class="box def"><span class="lab">Cộng / Nhân</span> Cộng: các phương án rời nhau \(n_1+\dots+n_k\). Nhân: các giai đoạn liên tiếp \(n_1\cdots n_k\).</div>`},
- {t:"Hoán vị, chỉnh hợp, tổ hợp",h:R`<div class="box def"><span class="lab">Công thức</span> \[P_n=n!,\quad A_n^k=\frac{n!}{(n-k)!},\quad C_n^k=\binom nk=\frac{n!}{k!(n-k)!}.\]</div>
- <div class="box note"><span class="lab">Chú ý</span> Chỉnh hợp = chọn <i>có thứ tự</i>; tổ hợp = <i>không</i> thứ tự. (Có máy tính ở mục Công cụ.)</div>
- <div class="box ex"><span class="lab">Ví dụ</span> Hộp 7 trắng 3 đen, lấy 4. \(\P(2\text{ trắng})=\dfrac{C_7^2 C_3^2}{C_{10}^4}=\dfrac{63}{210}=0{,}3\).</div>`},
- {t:"Nhị thức Newton",h:R`<div class="box thm"><span class="lab">Newton</span> \[(a+b)^n=\sum_{k=0}^n\binom nk a^{n-k}b^k,\quad \sum_{k=0}^n\binom nk=2^n.\]</div>`}
-]},
-{id:12,part:"PHỤ LỤC",title:"Bảng tra phân bố",sections:[
- {t:"Cách dùng",h:R`<p>Phụ lục B trong sách gồm bảng \(\Phi(z)\), Student \(t\) và \(\chi^2\). Trong app, các bảng này được <b>tính trực tiếp</b> và tra cứu tương tác ở mục <b>Công cụ</b> trên thanh điều hướng — chính xác hơn bảng in và không cần nội suy thủ công.</p>
- <div class="box note"><span class="lab">Mẹo</span> Phân vị thường dùng: \(z_{0{,}05}=1{,}645,\ z_{0{,}025}=1{,}96,\ z_{0{,}01}=2{,}326,\ z_{0{,}005}=2{,}576\).</div>`}
-]}
-];
-
-/* ---------- Flashcards ---------- */
-const FLASH=[
- {c:1,f:R`Công thức Bayes cho \(\P(B_k\mid A)\)?`,b:R`\[\P(B_k\mid A)=\frac{\P(B_k)\P(A\mid B_k)}{\sum_i\P(B_i)\P(A\mid B_i)}\]`},
- {c:1,f:R`Xác suất có điều kiện \(\P(A\mid B)\)?`,b:R`\(\P(A\mid B)=\dfrac{\P(A\cap B)}{\P(B)}\). Độc lập \(\iff \P(A\cap B)=\P(A)\P(B)\).`},
- {c:1,f:R`Công thức cộng xác suất?`,b:R`\(\P(A\cup B)=\P(A)+\P(B)-\P(A\cap B)\)`},
- {c:1,f:R`Công thức Bernoulli — đúng \(k\) trong \(n\)?`,b:R`\(\binom nk p^k(1-p)^{n-k}\)`},
- {c:2,f:R`Kỳ vọng & phương sai của \(B(n,p)\)?`,b:R`\(\E X=np,\quad \Var X=np(1-p)\)`},
- {c:2,f:R`Phân bố Poisson \(P(\lambda)\): công thức, \(\E,\Var\)?`,b:R`\(\P(X=k)=\dfrac{\lambda^k e^{-\lambda}}{k!},\quad \E X=\Var X=\lambda\)`},
- {c:2,f:R`Công thức tính nhanh phương sai?`,b:R`\(\Var X=\E X^2-(\E X)^2\)`},
- {c:2,f:R`Phân bố siêu bội \(\P(X=k)\)?`,b:R`\(\dfrac{\binom Kk\binom{N-K}{n-k}}{\binom Nn},\quad \E X=n\frac KN\)`},
- {c:3,f:R`Mật độ phân bố chuẩn \(N(\mu,\sigma^2)\)?`,b:R`\(f(x)=\dfrac1{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\)`},
- {c:3,f:R`Quy tắc 3σ (3 giá trị)?`,b:R`\(\P(|X-\mu|<\sigma)\approx0{,}683;\ <2\sigma\approx0{,}955;\ <3\sigma\approx0{,}997\)`},
- {c:3,f:R`Phân bố mũ: \(f,F,\E,\Var\)?`,b:R`\(f=\lambda e^{-\lambda x},\ F=1-e^{-\lambda x},\ \E=\tfrac1\lambda,\ \Var=\tfrac1{\lambda^2}\)`},
- {c:3,f:R`Phân bố đều \(U(a,b)\): \(\E,\Var\)?`,b:R`\(\E X=\tfrac{a+b}2,\quad \Var X=\tfrac{(b-a)^2}{12}\)`},
- {c:4,f:R`Hệ số tương quan \(\rho\) theo \(\cov\)?`,b:R`\(\rho=\dfrac{\cov(X,Y)}{\sqrt{\Var X\,\Var Y}},\ \cov=\E(XY)-\E X\E Y\)`},
- {c:4,f:R`\(\Var(X+Y)=?\)`,b:R`\(\Var X+\Var Y+2\cov(X,Y)\). Độc lập \(\Rightarrow\) bỏ số hạng \(\cov\).`},
- {c:5,f:R`Bất đẳng thức Chebyshev?`,b:R`\(\P(|X-\mu|\ge\varepsilon)\le\dfrac{\sigma^2}{\varepsilon^2}\)`},
- {c:5,f:R`Định lý giới hạn trung tâm?`,b:R`\(\dfrac{\overline X_n-\mu}{\sigma/\sqrt n}\xrightarrow{d}N(0,1)\); \(\overline X\approx N(\mu,\sigma^2/n)\)`},
- {c:5,f:R`Khi nào \(B(n,p)\approx N\)? Hiệu chỉnh?`,b:R`Khi \(np,n(1-p)\ge5\): \(N(np,np(1-p))\), dùng hiệu chỉnh liên tục \(\pm0{,}5\).`},
- {c:6,f:R`Phương sai mẫu hiệu chỉnh \(s^2\)?`,b:R`\(s^2=\dfrac1{n-1}\sum(x_i-\overline x)^2\)`},
- {c:7,f:R`Sai số chuẩn của \(\overline X\)?`,b:R`\(\sigma_{\overline X}=\dfrac{\sigma}{\sqrt n}\) — giảm cỡ mẫu 4 lần để giảm nửa sai số.`},
- {c:7,f:R`Phân bố của \(\dfrac{(n-1)S^2}{\sigma^2}\)?`,b:R`\(\chi^2(n-1)\). Và \(\dfrac{\overline X-\mu}{S/\sqrt n}\sim t(n-1)\).`},
- {c:8,f:R`KTC cho \(\mu\) khi \(\sigma\) chưa biết?`,b:R`\(\overline x\pm t_{\alpha/2}(n-1)\dfrac s{\sqrt n}\)`},
- {c:8,f:R`Cỡ mẫu ước lượng tỉ lệ (sai số \(E\))?`,b:R`\(n\ge\dfrac{z_{\alpha/2}^2\hat p(1-\hat p)}{E^2}\), xấu nhất \(\hat p=0{,}5\)`},
- {c:8,f:R`Ba tiêu chuẩn của ước lượng tốt?`,b:R`Không chệch (\(\E\hat\theta=\theta\)), hiệu quả (phương sai nhỏ nhất), vững (\(\hat\theta\xrightarrow{\P}\theta\)).`},
- {c:9,f:R`Sai lầm loại I và loại II?`,b:R`Loại I: bác bỏ \(H_0\) đúng (xs \(\alpha\)). Loại II: giữ \(H_0\) sai (xs \(\beta\)). Lực \(=1-\beta\).`},
- {c:9,f:R`Thống kê kiểm định \(\mu\) khi \(\sigma\) chưa biết?`,b:R`\(T=\dfrac{\overline x-\mu_0}{s/\sqrt n}\sim t(n-1)\). Bác bỏ nếu \(|T|>t_{\alpha/2}\).`},
- {c:9,f:R`Thống kê χ² kiểm định phù hợp?`,b:R`\(\chi^2=\sum\dfrac{(O_i-E_i)^2}{E_i}\sim\chi^2(k-1-r)\)`},
- {c:10,f:R`Hệ số góc \(b\) trong hồi quy LSQ?`,b:R`\(b=\dfrac{S_{xy}}{S_{xx}}=r\dfrac{s_y}{s_x},\quad a=\overline y-b\overline x\)`},
- {c:10,f:R`Ý nghĩa \(R^2\)?`,b:R`\(R^2=r^2\): tỉ lệ biến thiên của \(y\) được mô hình tuyến tính giải thích.`},
- {c:11,f:R`Phân biệt \(A_n^k\) và \(C_n^k\)?`,b:R`\(A_n^k=\dfrac{n!}{(n-k)!}\) (có thứ tự); \(C_n^k=\dfrac{n!}{k!(n-k)!}\) (không thứ tự).`},
- {c:11,f:R`Nhị thức Newton?`,b:R`\((a+b)^n=\sum_{k=0}^n\binom nk a^{n-k}b^k\)`}
-];
-
-/* ---------- Quiz ---------- */
-const QUIZ=[
- {c:1,q:R`Rút 1 lá từ bộ 52 lá. Xác suất được lá Át <i>hoặc</i> lá Cơ?`,o:[R`\(4/13\)`,R`\(1/4\)`,R`\(17/52\)`,R`\(1/13\)`],a:0,e:R`\(\frac4{52}+\frac{13}{52}-\frac1{52}=\frac{16}{52}=\frac4{13}\).`},
- {c:1,q:R`Bệnh tỉ lệ 1%, test đúng 99% ở người bệnh, dương giả 5%. \(\P(\text{bệnh}\mid+)\) gần nhất?`,o:[R`\(0{,}99\)`,R`\(0{,}17\)`,R`\(0{,}50\)`,R`\(0{,}05\)`],a:1,e:R`Bayes: \(\frac{0{,}01\cdot0{,}99}{0{,}01\cdot0{,}99+0{,}99\cdot0{,}05}\approx0{,}167\).`},
- {c:1,q:R`Hai biến cố \(A,B\) độc lập khi nào?`,o:[R`\(\P(A\cup B)=\P(A)+\P(B)\)`,R`\(A\cap B=\varnothing\)`,R`\(\P(A\cap B)=\P(A)\P(B)\)`,R`\(\P(A)=\P(B)\)`],a:2,e:R`Định nghĩa độc lập: \(\P(A\cap B)=\P(A)\P(B)\).`},
- {c:2,q:R`\(X\sim B(10,0{,}3)\). \(\E X\) và \(\Var X\)?`,o:[R`\(3\) và \(2{,}1\)`,R`\(3\) và \(3\)`,R`\(0{,}3\) và \(0{,}21\)`,R`\(10\) và \(3\)`],a:0,e:R`\(np=3,\ np(1-p)=10\cdot0{,}3\cdot0{,}7=2{,}1\).`},
- {c:2,q:R`Tổng đài nhận trung bình 4 cuộc/phút (Poisson). \(\P(X=2)\)?`,o:[R`\(0{,}147\)`,R`\(0{,}018\)`,R`\(0{,}500\)`,R`\(0{,}271\)`],a:0,e:R`\(\frac{4^2e^{-4}}{2!}=8e^{-4}\approx0{,}147\).`},
- {c:3,q:R`\(X\sim N(168,6^2)\). \(\P(162<X<180)\)?`,o:[R`\(0{,}68\)`,R`\(0{,}8185\)`,R`\(0{,}95\)`,R`\(0{,}9772\)`],a:1,e:R`\(\Phi(2)-\Phi(-1)=0{,}9772-0{,}1587=0{,}8185\).`},
- {c:3,q:R`Với ĐLNN liên tục, \(\P(X=c)\) bằng?`,o:[R`\(f(c)\)`,R`\(F(c)\)`,R`\(0\)`,R`\(1\)`],a:2,e:R`Mọi điểm đơn lẻ có xác suất 0; \(\P(a\le X\le b)=\P(a<X<b)\).`},
- {c:3,q:R`Tuổi thọ \(\sim\mathrm{Exp}\) trung bình 1000h. \(\P(X>1200)\)?`,o:[R`\(e^{-1{,}2}\approx0{,}301\)`,R`\(0{,}5\)`,R`\(e^{-1}\approx0{,}368\)`,R`\(0{,}2\)`],a:0,e:R`\(\lambda=0{,}001;\ \P(X>1200)=e^{-1{,}2}\approx0{,}301\).`},
- {c:4,q:R`\(X,Y\) độc lập, \(\Var X=4,\Var Y=9\). \(\Var(2X-Y)\)?`,o:[R`\(17\)`,R`\(25\)`,R`\(13\)`,R`\(1\)`],a:1,e:R`\(4\cdot4+1\cdot9=25\).`},
- {c:4,q:R`Phát biểu nào ĐÚNG?`,o:[R`\(\rho=0\Rightarrow\) độc lập (luôn)`,R`Độc lập \(\Rightarrow\rho=0\)`,R`\(\rho>1\) có thể xảy ra`,R`\(\cov<0\Rightarrow\) độc lập`],a:1,e:R`Độc lập kéo theo \(\rho=0\); chiều ngược chỉ đúng cho vector chuẩn.`},
- {c:5,q:R`\(\E X=10,\Var X=4\). Chặn Chebyshev cho \(\P(|X-10|\ge5)\)?`,o:[R`\(\le0{,}16\)`,R`\(\le0{,}5\)`,R`\(\le0{,}04\)`,R`\(=0{,}16\)`],a:0,e:R`\(\frac{\sigma^2}{\varepsilon^2}=\frac4{25}=0{,}16\) (chặn trên).`},
- {c:5,q:R`100 kiện, \(\mu=50,\sigma=5\). \(\P(\text{tổng}>5100)\)?`,o:[R`\(0{,}0228\)`,R`\(0{,}5\)`,R`\(0{,}1587\)`,R`\(0{,}05\)`],a:0,e:R`Tổng \(\approx N(5000,2500)\); \(1-\Phi(2)=0{,}0228\).`},
- {c:6,q:R`Đặc trưng nào BỀN nhất với giá trị ngoại lai?`,o:[R`Trung bình`,R`Phương sai`,R`Trung vị`,R`Khoảng biến thiên`],a:2,e:R`Trung vị không bị kéo bởi giá trị cực đoan.`},
- {c:6,q:R`Vì sao \(s^2\) chia cho \(n-1\)?`,o:[R`Cho dễ tính`,R`Để không chệch (\(\E s^2=\sigma^2\))`,R`Để \(s^2\) nhỏ hơn`,R`Quy ước tùy ý`],a:1,e:R`Chia \(n-1\) làm \(s^2\) là ước lượng không chệch của \(\sigma^2\).`},
- {c:7,q:R`Tổng thể \(N(50,10^2)\), \(n=25\). Sai số chuẩn của \(\overline X\)?`,o:[R`\(10\)`,R`\(2\)`,R`\(0{,}4\)`,R`\(5\)`],a:1,e:R`\(\sigma/\sqrt n=10/5=2\).`},
- {c:7,q:R`\(\dfrac{(n-1)S^2}{\sigma^2}\) tuân theo phân bố?`,o:[R`\(N(0,1)\)`,R`\(t(n-1)\)`,R`\(\chi^2(n-1)\)`,R`\(F\)`],a:2,e:R`Định lý phân bố phương sai mẫu (tổng thể chuẩn).`},
- {c:8,q:R`\(n=25,\overline x=20{,}1,s=0{,}4\), \(t_{0{,}025}(24)=2{,}064\). KTC 95% cho \(\mu\)?`,o:[R`\((19{,}94;20{,}27)\)`,R`\((19{,}7;20{,}5)\)`,R`\((20{,}0;20{,}2)\)`,R`\((19{,}9;20{,}3)\)`],a:0,e:R`\(E=2{,}064\cdot0{,}4/5=0{,}165\Rightarrow(19{,}94;20{,}27)\).`},
- {c:8,q:R`Ước lượng tỉ lệ, sai số \(\le3\%\), tin cậy 95%, chưa biết \(p\). Cỡ mẫu?`,o:[R`\(385\)`,R`\(1068\)`,R`\(683\)`,R`\(100\)`],a:1,e:R`\(n\ge\frac{1{,}96^2\cdot0{,}25}{0{,}03^2}\approx1067\Rightarrow1068\).`},
- {c:9,q:R`\(\mu_0=1000,n=25,\overline x=970,s=50\). \(T\) và kết luận (\(\alpha=0{,}05\), một phía)?`,o:[R`\(T=-3\), bác bỏ \(H_0\)`,R`\(T=-3\), giữ \(H_0\)`,R`\(T=3\), bác bỏ`,R`\(T=-0{,}6\), giữ`],a:0,e:R`\(T=\frac{970-1000}{50/5}=-3<-1{,}711\Rightarrow\) bác bỏ.`},
- {c:9,q:R`Khi nào bác bỏ \(H_0\) theo \(p\)-value?`,o:[R`\(p>\alpha\)`,R`\(p<\alpha\)`,R`\(p=1\)`,R`luôn bác bỏ`],a:1,e:R`Bác bỏ \(H_0\) khi \(p\text{-value}<\alpha\).`},
- {c:10,q:R`Dữ liệu \(x:1..5,\ y:3,4,6,7,8\). Đường hồi quy?`,o:[R`\(\hat y=1{,}7+1{,}3x\)`,R`\(\hat y=2+x\)`,R`\(\hat y=3+x\)`,R`\(\hat y=1{,}3+1{,}7x\)`],a:0,e:R`\(b=S_{xy}/S_{xx}=13/10=1{,}3,\ a=5{,}6-1{,}3\cdot3=1{,}7\).`},
- {c:10,q:R`\(R^2=0{,}9\) nghĩa là gì?`,o:[R`90% dữ liệu đúng`,R`Mô hình giải thích 90% biến thiên của \(y\)`,R`Sai số 90%`,R`\(r=0{,}9\)`],a:1,e:R`\(R^2\) = tỉ lệ biến thiên của \(y\) được giải thích; \(r=\sqrt{0{,}9}\approx0{,}95\).`},
- {c:11,q:R`Hộp 7 trắng 3 đen, lấy 4 bi. \(\P(\text{đúng 2 trắng})\)?`,o:[R`\(0{,}3\)`,R`\(0{,}5\)`,R`\(0{,}21\)`,R`\(0{,}15\)`],a:0,e:R`\(\frac{C_7^2 C_3^2}{C_{10}^4}=\frac{21\cdot3}{210}=0{,}3\).`},
- {c:11,q:R`Chọn ban gồm 3 người (vai trò như nhau) từ 10 người: số cách?`,o:[R`\(720\)`,R`\(120\)`,R`\(1000\)`,R`\(30\)`],a:1,e:R`Không thứ tự \(\Rightarrow C_{10}^3=120\) (nếu có chức vụ thì \(A_{10}^3=720\)).`}
-];
-
-/* ============================================================
-   APP STATE + RENDER
-   ============================================================ */
-let view='dash';
-let curChap=0;
-let deckFilter='all';
-let fcCurrent=null, fcShowBack=false;
-let quizChap='all', quizList=[], quizIdx=0, quizAnswered=false, quizScore=0, quizPick=-1, quizDone=false;
-let toolTab='normal';
-
-const el=document.getElementById('content');
-const NAV=[
- {id:'dash',label:'Tổng quan',ic:'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'},
- {id:'lessons',label:'Bài học',ic:'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z'},
- {id:'flash',label:'Thẻ ghi nhớ',ic:'M2 7l10-4 10 4-10 4L2 7zm0 5l10 4 10-4M2 17l10 4 10-4'},
- {id:'quiz',label:'Trắc nghiệm',ic:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
- {id:'tools',label:'Công cụ',ic:'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6z'}
-];
-
-function dueCount(){
-  const now=Date.now(); let n=0;
-  FLASH.forEach((c,i)=>{const s=progress.srs['f'+i]; if(!s||s.due<=now)n++;});
-  return n;
-}
-function svgIcon(d){return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="'+d+'"/></svg>';}
-
-function buildNav(target){
-  target.innerHTML='';
-  NAV.forEach(n=>{
-    const b=document.createElement('button');
-    b.className=(view===n.id?'on':'');
-    b.innerHTML=svgIcon(n.ic)+'<span>'+n.label+'</span>';
-    if(n.id==='flash'){const d=dueCount(); if(d>0)b.innerHTML+='<span class="badge">'+d+'</span>';}
-    b.onclick=()=>{view=n.id; if(n.id==='quiz'){quizDone=false;quizList=[];} closeDrawer(); render();};
-    target.appendChild(b);
-  });
-}
-function closeDrawer(){document.getElementById('drawer').classList.remove('open');}
-
-function totalSections(){return CH.reduce((s,c)=>s+c.sections.length,0);}
-function learnedCount(){return Object.values(progress.learned).filter(Boolean).length;}
-function chapLearned(ci){const c=CH[ci];let n=0;c.sections.forEach((_,si)=>{if(progress.learned[c.id+'.'+si])n++;});return n;}
-
-/* ---------- Dashboard ---------- */
-function renderDash(){
-  const tot=totalSections(), done=learnedCount();
-  const p=tot?done/tot:0;
-  // quiz accuracy
-  let qc=0,qt=0; Object.values(progress.quiz).forEach(v=>{qc+=v.correct;qt+=v.total;});
-  const acc=qt?Math.round(100*qc/qt):0;
-  const cardsStudied=Object.keys(progress.srs).length;
-  const due=dueCount();
-
-  el.innerHTML=`
-  <h2 class="view-title">Tổng quan</h2>
-  <p class="view-sub">Hành trình học toàn bộ giáo trình — vùng tô là phần kiến thức bạn đã nắm.</p>
-  <div class="hero">
-    <div class="curvewrap" id="curvewrap"></div>
-    <div class="hero-info">
-      <h2>Mức độ hoàn thành</h2>
-      <div class="pct">${Math.round(p*100)}<small>%</small></div>
-      <div class="heronote">Đã học ${done}/${tot} mục kiến thức. "Diện tích dưới đường cong" lớn dần theo tiến độ của bạn.</div>
-    </div>
-  </div>
-  <div class="cards">
-    <div class="stat"><div class="k"><span class="dot" style="background:var(--teal)"></span>Mục đã học</div><div class="v">${done}<span class="u"> / ${tot}</span></div></div>
-    <div class="stat"><div class="k"><span class="dot" style="background:var(--amber)"></span>Thẻ ôn hôm nay</div><div class="v">${due}</div></div>
-    <div class="stat"><div class="k"><span class="dot" style="background:var(--forest)"></span>Độ chính xác trắc nghiệm</div><div class="v">${acc}<span class="u">%</span></div></div>
-    <div class="stat"><div class="k"><span class="dot" style="background:var(--royal)"></span>Thẻ đã gặp</div><div class="v">${cardsStudied}<span class="u"> / ${FLASH.length}</span></div></div>
-  </div>
-
-  <div class="panel">
-    <h3>Tiếp tục học</h3>
-    <p class="lead">Chọn nơi bắt đầu hoặc ôn lại những thẻ đến hạn.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="btn" id="goLessons">Vào bài học →</button>
-      ${due>0?`<button class="btn amber" id="goFlash">Ôn ${due} thẻ đến hạn</button>`:''}
-      <button class="btn ghost" id="goQuiz">Làm trắc nghiệm</button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>Tiến độ theo chương</h3>
-    <div class="chaptrack" id="chaptrack"></div>
-  </div>`;
-
-  drawHeroCurve(p);
-  const ct=document.getElementById('chaptrack');
-  CH.forEach((c,ci)=>{
-    const n=chapLearned(ci), m=c.sections.length, pc=Math.round(100*n/m);
-    const row=document.createElement('div'); row.className='ctrow';
-    const isApp=c.part==='PHỤ LỤC';
-    row.innerHTML=`<div class="name">${isApp?'PL. ':'Ch. '+c.id+'. '}${c.title}</div>
-      <div class="bar"><i style="width:${pc}%"></i></div><div class="num">${n}/${m}</div>`;
-    row.style.cursor='pointer';
-    row.onclick=()=>{view='lessons';curChap=ci;render();};
-    ct.appendChild(row);
-  });
-  document.getElementById('goLessons').onclick=()=>{view='lessons';render();};
-  document.getElementById('goQuiz').onclick=()=>{view='quiz';quizDone=false;quizList=[];render();};
-  const gf=document.getElementById('goFlash'); if(gf)gf.onclick=()=>{view='flash';render();};
-}
-
-function drawHeroCurve(p){
-  // shade central area = p ; z bound such that area between [-z,z]=p
-  const W=420,H=200,pad=14;
-  const xmin=-3.4,xmax=3.4;
-  const X=x=>pad+(x-xmin)/(xmax-xmin)*(W-2*pad);
-  const Ymax=normPDF(0)*1.12;
-  const Y=y=>H-pad-(y/Ymax)*(H-2*pad);
-  let curve=''; const N=120;
-  for(let i=0;i<=N;i++){const x=xmin+(xmax-xmin)*i/N; curve+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(normPDF(x)).toFixed(1)+' ';}
-  let z=p>=1?xmax:(p<=0?0:Math.min(normInv((1+p)/2),xmax));
-  let fill='M'+X(-z).toFixed(1)+' '+Y(0)+' ';
-  for(let i=0;i<=N;i++){const x=-z+(2*z)*i/N; fill+='L'+X(x).toFixed(1)+' '+Y(normPDF(x)).toFixed(1)+' ';}
-  fill+='L'+X(z).toFixed(1)+' '+Y(0)+' Z';
-  const ax=Y(0);
-  document.getElementById('curvewrap').innerHTML=`
-  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong chuẩn với vùng tô thể hiện tiến độ">
-    <line x1="${pad}" y1="${ax}" x2="${W-pad}" y2="${ax}" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
-    <path d="${fill}" fill="rgba(95,196,190,.55)"/>
-    <path d="${curve}" fill="none" stroke="#9FE3DE" stroke-width="2.4"/>
-    <line x1="${X(0)}" y1="${ax}" x2="${X(0)}" y2="${Y(normPDF(0))}" stroke="rgba(255,255,255,.35)" stroke-dasharray="3 3"/>
-  </svg>`;
-}
-
-/* ---------- Lessons ---------- */
-function renderLessons(){
-  el.innerHTML=`<h2 class="view-title">Bài học</h2>
-   <p class="view-sub">Toàn bộ giáo trình, rút gọn thành các thẻ định nghĩa – định lý – ví dụ cốt lõi.</p>
-   <div class="lessons-layout">
-     <div class="chaplist" id="chaplist"></div>
-     <div class="reader" id="reader"></div>
-   </div>`;
-  const cl=document.getElementById('chaplist');
-  let lastPart='';
-  CH.forEach((c,ci)=>{
-    if(c.part!==lastPart){const p=document.createElement('div');p.className='part';p.textContent=c.part;cl.appendChild(p);lastPart=c.part;}
-    const b=document.createElement('button'); b.className=(ci===curChap?'on':'');
-    const done=chapLearned(ci),m=c.sections.length;
-    const isApp=c.part==='PHỤ LỤC';
-    b.innerHTML=`<span class="cnum">${isApp?(c.id===11?'A':'B'):c.id}</span><span>${c.title}</span>`+(done===m?'<span class="ck">✓</span>':'');
-    b.onclick=()=>{curChap=ci;renderLessons();window.scrollTo(0,0);};
-    cl.appendChild(b);
-  });
-  renderReader();
-}
-function renderReader(){
-  const c=CH[curChap];
-  const r=document.getElementById('reader');
-  const isApp=c.part==='PHỤ LỤC';
-  let html=`<div class="chead"><div class="eb">${isApp?'Phụ lục '+(c.id===11?'A':'B'):'Chương '+c.id}</div><h2>${c.title}</h2></div>`;
-  c.sections.forEach((s,si)=>{
-    const key=c.id+'.'+si, done=progress.learned[key];
-    html+=`<div class="sec"><h3><span class="sn">${isApp?'':c.id+'.'+(si+1)}</span>${s.t}</h3>${s.h}
-      <div class="markdone">
-        <button class="btn ${done?'ghost':''}" data-key="${key}">${done?'✓ Đã học — bỏ đánh dấu':'Đánh dấu đã học'}</button>
-      </div></div>`;
-  });
-  html+=`<div class="lesson-nav">
-    <button id="prevCh" ${curChap===0?'disabled':''}>← ${curChap>0?CH[curChap-1].title:''}</button>
-    <button id="nextCh" ${curChap===CH.length-1?'disabled':''}>${curChap<CH.length-1?CH[curChap+1].title:''} →</button>
-  </div>`;
-  r.innerHTML=html;
-  renderMath(r);
-  r.querySelectorAll('[data-key]').forEach(btn=>{
-    btn.onclick=()=>{const k=btn.dataset.key; progress.learned[k]=!progress.learned[k]; saveProgress(); renderLessons();};
-  });
-  const pv=document.getElementById('prevCh'),nx=document.getElementById('nextCh');
-  if(pv&&curChap>0)pv.onclick=()=>{curChap--;renderLessons();window.scrollTo(0,0);};
-  if(nx&&curChap<CH.length-1)nx.onclick=()=>{curChap++;renderLessons();window.scrollTo(0,0);};
-}
-
-/* ---------- Flashcards (SM-2 lite) ---------- */
-function deckCards(){
-  return FLASH.map((c,i)=>({...c,idx:i}))
-    .filter(c=>deckFilter==='all'||c.c===+deckFilter);
-}
-function nextDue(){
-  const now=Date.now();
-  const pool=deckCards().filter(c=>{const s=progress.srs['f'+c.idx];return !s||s.due<=now;});
-  if(pool.length===0)return null;
-  // earliest due / new first
-  pool.sort((a,b)=>{const sa=progress.srs['f'+a.idx],sb=progress.srs['f'+b.idx];return (sa?sa.due:0)-(sb?sb.due:0);});
-  return pool[0];
-}
-function renderFlash(){
-  el.innerHTML=`<h2 class="view-title">Thẻ ghi nhớ</h2>
-    <p class="view-sub">Lặp lại ngắt quãng (SM-2): đánh giá độ nhớ, hệ thống tự xếp lịch ôn.</p>
-    <div class="deckpick" id="deckpick"></div>
-    <div class="fc-stage" id="fcstage"></div>`;
-  const dp=document.getElementById('deckpick');
-  const mk=(v,l)=>{const b=document.createElement('button');b.className=(deckFilter===v?'on':'');b.textContent=l;b.onclick=()=>{deckFilter=v;fcShowBack=false;fcCurrent=null;renderFlash();};dp.appendChild(b);};
-  mk('all','Tất cả');
-  CH.forEach(c=>{ if(FLASH.some(f=>f.c===c.id)) mk(String(c.id), (c.part==='PHỤ LỤC'?'PL ':'Ch')+c.id); });
-  drawFlash();
-}
-function drawFlash(){
-  const stage=document.getElementById('fcstage');
-  if(!fcCurrent)fcCurrent=nextDue();
-  if(!fcCurrent){
-    stage.innerHTML=`<div class="fc-empty"><div class="big">✓</div><p>Không còn thẻ đến hạn trong bộ này. Quay lại sau hoặc chọn bộ khác.</p>
-      <button class="btn ghost" id="studyAll">Ôn lại toàn bộ bộ này</button></div>`;
-    const sa=document.getElementById('studyAll');
-    if(sa)sa.onclick=()=>{ // reset due of this deck to now
-      deckCards().forEach(c=>{const k='f'+c.idx;const s=progress.srs[k];if(s){s.due=Date.now();}});
-      saveProgress();fcCurrent=null;drawFlash();updateBadges();};
-    return;
-  }
-  const c=fcCurrent;
-  const total=deckCards().length;
-  const due=deckCards().filter(x=>{const s=progress.srs['f'+x.idx];return !s||s.due<=Date.now();}).length;
-  stage.innerHTML=`
-    <div class="fc-meta"><span class="tag">Ch ${c.c}</span><span>${due} thẻ đến hạn · ${total} thẻ trong bộ</span></div>
-    <div class="flashcard" id="card">
-      <div class="side-label">${fcShowBack?'Trả lời':'Câu hỏi'}</div>
-      <div class="body ${fcShowBack?'':'q'}" id="cardbody">${fcShowBack?c.b:c.f}</div>
-      <div class="hint">${fcShowBack?'Bạn nhớ tốt đến đâu?':'Chạm để xem đáp án'}</div>
-    </div>
-    ${fcShowBack?`<div class="fc-rate">
-      <button class="again" data-q="0">Quên<small>&lt;1 phút</small></button>
-      <button class="hard" data-q="1">Khó<small>sớm</small></button>
-      <button class="good" data-q="2">Tốt<small>+lịch</small></button>
-      <button class="easy" data-q="3">Dễ<small>++lịch</small></button>
-    </div>`:''}`;
-  renderMath(stage);
-  const card=document.getElementById('card');
-  card.onclick=()=>{if(!fcShowBack){fcShowBack=true;drawFlash();}};
-  stage.querySelectorAll('[data-q]').forEach(b=>{b.onclick=()=>rate(c.idx,+b.dataset.q);});
-}
-function rate(idx,q){
-  const k='f'+idx; const now=Date.now(); const DAY=86400000;
-  let s=progress.srs[k]||{ease:2.5,interval:0,reps:0,due:now};
-  if(q===0){s.reps=0;s.interval=0;s.due=now+60000;} // 1 min
-  else{
-    s.reps++;
-    if(s.reps===1)s.interval=q===3?2:1;
-    else if(s.reps===2)s.interval=q===1?3:6;
-    else s.interval=Math.round(s.interval*s.ease);
-    s.ease=Math.max(1.3, s.ease + (0.1-(3-q)*(0.08+(3-q)*0.02)));
-    if(q===1)s.interval=Math.max(1,Math.round(s.interval*0.6));
-    s.due=now+s.interval*DAY;
-  }
-  progress.srs[k]=s; saveProgress();
-  fcShowBack=false; fcCurrent=null; drawFlash(); updateBadges();
-}
-function updateBadges(){buildNav(document.getElementById('nav'));buildNav(document.getElementById('navMobile'));}
-
-/* ---------- Quiz ---------- */
-function renderQuiz(){
-  if(quizDone){renderScore();return;}
-  if(quizList.length===0){renderQuizPick();return;}
-  const q=quizList[quizIdx];
-  el.innerHTML=`<h2 class="view-title">Trắc nghiệm</h2>
-   <p class="view-sub">${quizChap==='all'?'Đề tổng hợp':'Chương '+quizChap} · câu ${quizIdx+1}/${quizList.length} · điểm ${quizScore}</p>
-   <div class="quiz-stage">
-     <div class="qprog"><i style="width:${100*quizIdx/quizList.length}%"></i></div>
-     <div class="qcard" id="qcard"></div>
-     <div class="quiz-foot">
-       <button class="btn ghost" id="qquit">Thoát</button>
-       <button class="btn" id="qnext" ${quizAnswered?'':'disabled'}>${quizIdx===quizList.length-1?'Xem kết quả':'Câu tiếp →'}</button>
-     </div>
-   </div>`;
-  const qc=document.getElementById('qcard');
-  let html=`<div class="qnum">Câu ${quizIdx+1}</div><div class="qtext">${q.q}</div>`;
-  q.o.forEach((opt,i)=>{
-    let cls='opt';
-    if(quizAnswered){if(i===q.a)cls+=' correct';else if(i===quizPick)cls+=' wrong';}
-    html+=`<button class="${cls}" data-i="${i}" ${quizAnswered?'disabled':''}><span class="key">${'ABCD'[i]}</span><span>${opt}</span></button>`;
-  });
-  if(quizAnswered)html+=`<div class="explain"><div class="et">${quizPick===q.a?'Chính xác':'Giải thích'}</div>${q.e}</div>`;
-  qc.innerHTML=html;
-  renderMath(qc);
-  qc.querySelectorAll('[data-i]').forEach(b=>{b.onclick=()=>{
-    if(quizAnswered)return;
-    quizPick=+b.dataset.i; quizAnswered=true;
-    if(quizPick===q.a)quizScore++;
-    renderQuiz();
-  };});
-  document.getElementById('qquit').onclick=()=>{quizList=[];quizDone=false;render();};
-  document.getElementById('qnext').onclick=()=>{
-    if(!quizAnswered)return;
-    if(quizIdx===quizList.length-1)finishQuiz();
-    else{quizIdx++;quizAnswered=false;quizPick=-1;renderQuiz();window.scrollTo(0,0);}
-  };
-}
-function renderQuizPick(){
-  el.innerHTML=`<h2 class="view-title">Trắc nghiệm</h2>
-   <p class="view-sub">Chọn phạm vi. Mỗi đề xáo trộn thứ tự câu hỏi.</p>
-   <div class="panel"><h3>Chọn đề</h3>
-   <div class="deckpick" id="qpick"></div>
-   <button class="btn lg" id="qstart">Bắt đầu →</button></div>`;
-  const qp=document.getElementById('qpick');
-  const mk=(v,l)=>{const b=document.createElement('button');b.className=(quizChap===v?'on':'');b.textContent=l;b.onclick=()=>{quizChap=v;renderQuizPick();};qp.appendChild(b);};
-  mk('all','Tổng hợp (tất cả)');
-  CH.forEach(c=>{if(QUIZ.some(q=>q.c===c.id))mk(String(c.id),(c.part==='PHỤ LỤC'?'PL ':'Ch ')+c.id+'. '+c.title);});
-  document.getElementById('qstart').onclick=()=>{
-    let list=QUIZ.map((q,i)=>({...q,gi:i})).filter(q=>quizChap==='all'||q.c===+quizChap);
-    for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}
-    quizList=list;quizIdx=0;quizScore=0;quizAnswered=false;quizPick=-1;quizDone=false;
-    renderQuiz();
-  };
-}
-function finishQuiz(){
-  const key=quizChap==='all'?'all':('c'+quizChap);
-  const rec=progress.quiz[key]||{correct:0,total:0,best:0};
-  rec.correct+=quizScore;rec.total+=quizList.length;
-  rec.best=Math.max(rec.best,Math.round(100*quizScore/quizList.length));
-  progress.quiz[key]=rec;saveProgress();
-  quizDone=true;renderQuiz();
-}
-function renderScore(){
-  const pct=Math.round(100*quizScore/quizList.length);
-  const msg=pct>=90?'Xuất sắc! Bạn nắm rất chắc.':pct>=70?'Tốt — ôn lại vài câu sai là ổn.':pct>=50?'Khá ổn, cần luyện thêm.':'Hãy xem lại bài học rồi thử lại nhé.';
-  el.innerHTML=`<h2 class="view-title">Kết quả</h2><p class="view-sub">${quizChap==='all'?'Đề tổng hợp':'Chương '+quizChap}</p>
-   <div class="panel scoreboard">
-     <div class="ring">${quizScore}<span style="color:var(--faint);font-size:34px">/${quizList.length}</span></div>
-     <div class="msg">${pct}% đúng — ${msg}</div>
-     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-       <button class="btn" id="again">Làm lại</button>
-       <button class="btn ghost" id="other">Chọn đề khác</button>
-     </div>
-   </div>`;
-  document.getElementById('again').onclick=()=>{
-    for(let i=quizList.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[quizList[i],quizList[j]]=[quizList[j],quizList[i]];}
-    quizIdx=0;quizScore=0;quizAnswered=false;quizPick=-1;quizDone=false;renderQuiz();
-  };
-  document.getElementById('other').onclick=()=>{quizList=[];quizDone=false;render();};
-}
-
-/* ---------- Tools ---------- */
-function renderTools(){
-  el.innerHTML=`<h2 class="view-title">Công cụ tra cứu</h2>
-   <p class="view-sub">Máy tính phân bố chuẩn (tính trực tiếp) và bảng tra t, χ², tổ hợp.</p>
-   <div class="tooltabs" id="tooltabs"></div>
-   <div class="panel" id="toolbody"></div>`;
-  const tt=document.getElementById('tooltabs');
-  [['normal','Phân bố chuẩn Φ(z)'],['t','Bảng Student t'],['chi','Bảng χ²'],['combo','Tổ hợp']].forEach(([v,l])=>{
-    const b=document.createElement('button');b.className=(toolTab===v?'on':'');b.textContent=l;b.onclick=()=>{toolTab=v;renderTools();};tt.appendChild(b);
-  });
-  if(toolTab==='normal')toolNormal();
-  else if(toolTab==='t')toolT();
-  else if(toolTab==='chi')toolChi();
-  else toolCombo();
-}
-function toolNormal(){
-  const tb=document.getElementById('toolbody');
-  tb.innerHTML=`<h3>Phân bố chuẩn</h3><p class="lead">Tính \\(\\Phi(z)=\\P(Z<z)\\) xuôi và ngược, hoặc xác suất \\(\\P(a<X<b)\\) cho \\(N(\\mu,\\sigma^2)\\).</p>
-   <div class="calc">
-     <div>
-       <div class="field"><label>Tính Φ(z) — nhập z</label><input id="zin" type="number" step="0.01" value="1.96"></div>
-       <div class="result"><div class="rk">Φ(z) = P(Z &lt; z)</div><div class="rv" id="zout">—</div><div class="rextra" id="zextra"></div></div>
-       <div style="height:18px"></div>
-       <div class="field"><label>Tìm z ngược — nhập xác suất p ∈ (0,1)</label><input id="pin" type="number" step="0.01" min="0.001" max="0.999" value="0.975"></div>
-       <div class="result" style="background:var(--teal)"><div class="rk">z sao cho Φ(z)=p</div><div class="rv" id="pout">—</div></div>
-     </div>
-     <div>
-       <div class="field"><label>P(a &lt; X &lt; b) với X ~ N(μ, σ²)</label></div>
-       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-         <div class="field"><label>μ</label><input id="mu" type="number" value="0"></div>
-         <div class="field"><label>σ</label><input id="sg" type="number" value="1" step="0.1"></div>
-         <div class="field"><label>a</label><input id="aa" type="number" value="-1.96"></div>
-         <div class="field"><label>b</label><input id="bb" type="number" value="1.96"></div>
-       </div>
-       <div class="result" style="background:var(--amber)"><div class="rk">P(a &lt; X &lt; b)</div><div class="rv" id="about">—</div><div class="rextra" id="abextra"></div></div>
-     </div>
-   </div>
-   <div class="toolnote">Φ(z) tính bằng xấp xỉ hàm sai số erf (sai số &lt; 1,5·10⁻⁷). Một số mốc: Φ(1,645)=0,95 · Φ(1,96)=0,975 · Φ(2,576)=0,995.</div>`;
-  renderMath(tb);
-  const upd=()=>{
-    const z=parseFloat(document.getElementById('zin').value);
-    if(!isNaN(z)){document.getElementById('zout').textContent=normCDF(z).toFixed(4).replace('.',',');
-      document.getElementById('zextra').textContent='P(Z>z)='+(1-normCDF(z)).toFixed(4).replace('.',',');}
-    const p=parseFloat(document.getElementById('pin').value);
-    if(!isNaN(p)&&p>0&&p<1)document.getElementById('pout').textContent=normInv(p).toFixed(4).replace('.',',');
-    const mu=parseFloat(document.getElementById('mu').value),sg=parseFloat(document.getElementById('sg').value),
-          a=parseFloat(document.getElementById('aa').value),b=parseFloat(document.getElementById('bb').value);
-    if(!isNaN(mu)&&!isNaN(sg)&&sg>0&&!isNaN(a)&&!isNaN(b)){
-      const pr=normCDF((b-mu)/sg)-normCDF((a-mu)/sg);
-      document.getElementById('about').textContent=pr.toFixed(4).replace('.',',');
-      document.getElementById('abextra').textContent='z: ['+((a-mu)/sg).toFixed(2).replace('.',',')+' ; '+((b-mu)/sg).toFixed(2).replace('.',',')+']';
-    }
-  };
-  tb.querySelectorAll('input').forEach(i=>i.addEventListener('input',upd));
-  upd();
-}
-function statTable(alphas,table,label,desc){
-  const tb=document.getElementById('toolbody');
-  let html=`<h3>${label}</h3><p class="lead">${desc}</p>
-   <div class="field" style="max-width:260px"><label>Tô sáng cột α</label><select id="alphasel">`;
-  alphas.forEach((a,i)=>html+=`<option value="${i}">α = ${String(a).replace('.',',')}</option>`);
-  html+=`</select></div><div class="statable-wrap"><table><thead><tr><th>n \\ α</th>`;
-  alphas.forEach(a=>html+=`<th>${String(a).replace('.',',')}</th>`);
-  html+=`</tr></thead><tbody>`;
-  Object.keys(table).forEach(df=>{
-    html+=`<tr><td class="dfc">${df}</td>`;
-    table[df].forEach((v,i)=>html+=`<td data-col="${i}">${v.toFixed(3).replace('.',',')}</td>`);
-    html+=`</tr>`;
-  });
-  html+=`</tbody></table></div>`;
-  tb.innerHTML=html;
-  const sel=document.getElementById('alphasel');
-  const hl=()=>{const c=+sel.value;tb.querySelectorAll('td[data-col]').forEach(td=>{td.classList.toggle('hl',+td.dataset.col===c);});};
-  sel.onchange=hl;hl();
-}
-function toolT(){statTable(STATS.t_alphas,STATS.t_table,'Bảng Student t — tₐ(n)','Giá trị tₐ(n) thoả P(T > tₐ(n)) = α. Hàng n = bậc tự do.');}
-function toolChi(){statTable(STATS.chi_alphas,STATS.chi_table,'Bảng χ² — χ²ₐ(n)','Giá trị χ²ₐ(n) thoả P(χ² > χ²ₐ(n)) = α. Hàng n = bậc tự do.');}
-function toolCombo(){
-  const tb=document.getElementById('toolbody');
-  tb.innerHTML=`<h3>Giải tích tổ hợp</h3><p class="lead">Tính giai thừa, hoán vị, chỉnh hợp \\(A_n^k\\), tổ hợp \\(C_n^k\\).</p>
-   <div class="calc">
-     <div>
-       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-         <div class="field"><label>n</label><input id="cn" type="number" min="0" value="10"></div>
-         <div class="field"><label>k</label><input id="ck" type="number" min="0" value="3"></div>
-       </div>
-     </div>
-     <div>
-       <div class="result"><div class="rk">Tổ hợp Cₙᵏ (không thứ tự)</div><div class="rv" id="rc">—</div></div>
-       <div style="height:12px"></div>
-       <div class="result" style="background:var(--teal)"><div class="rk">Chỉnh hợp Aₙᵏ (có thứ tự)</div><div class="rv" id="ra">—</div></div>
-       <div style="height:12px"></div>
-       <div class="result" style="background:var(--amber)"><div class="rk">Giai thừa n!</div><div class="rv" id="rf">—</div></div>
-     </div>
-   </div>
-   <div class="toolnote">Cₙᵏ = n! / [k!(n−k)!] · Aₙᵏ = n!/(n−k)! · với n lớn kết quả hiển thị dạng xấp xỉ.</div>`;
-  renderMath(tb);
-  const fmt=x=>{if(x===Infinity||x>1e15)return x.toExponential(3).replace('.',',');return x.toLocaleString('vi-VN');};
-  const upd=()=>{
-    const n=parseInt(document.getElementById('cn').value),k=parseInt(document.getElementById('ck').value);
-    if(isNaN(n)||isNaN(k)){return;}
-    document.getElementById('rc').textContent=(k>=0&&k<=n)?fmt(nCr(n,k)):'—';
-    document.getElementById('ra').textContent=(k>=0&&k<=n)?fmt(nPr(n,k)):'—';
-    document.getElementById('rf').textContent=(n>=0&&n<=170)?fmt(fact(n)):'quá lớn';
-  };
-  tb.querySelectorAll('input').forEach(i=>i.addEventListener('input',upd));
-  upd();
-}
-
-/* ---------- KaTeX render ---------- */
-const KMACROS={
-  "\\P":"\\mathsf{P}",
-  "\\E":"\\operatorname{E}",
-  "\\Var":"\\operatorname{D}",
-  "\\cov":"\\operatorname{cov}",
-  "\\given":"\\mid"
-};
-function renderMath(node){
-  if(window.renderMathInElement){
-    try{renderMathInElement(node,{delimiters:[
-      {left:'\\[',right:'\\]',display:true},
-      {left:'\\(',right:'\\)',display:false}
-    ],macros:KMACROS,throwOnError:false});}catch(e){}
-  }
-}
-
-/* ---------- Router ---------- */
-function render(){
-  buildNav(document.getElementById('nav'));
-  buildNav(document.getElementById('navMobile'));
-  document.getElementById('mobileTitle').textContent=(NAV.find(n=>n.id===view)||{}).label||'';
-  if(view==='dash')renderDash();
-  else if(view==='lessons')renderLessons();
-  else if(view==='flash')renderFlash();
-  else if(view==='quiz')renderQuiz();
-  else if(view==='tools')renderTools();
-  window.scrollTo(0,0);
-}
-
-document.getElementById('menuBtn').onclick=()=>document.getElementById('drawer').classList.add('open');
-document.getElementById('scrim').onclick=closeDrawer;
-document.getElementById('resetBtn').onclick=async()=>{
-  if(confirm('Xoá toàn bộ tiến độ học (mục đã học, lịch thẻ, điểm trắc nghiệm)?')){
-    progress={learned:{},srs:{},quiz:{}};await saveProgress();fcCurrent=null;fcShowBack=false;render();
-  }
-};
-
-/* ---------- boot ---------- */
-(async function(){
-  await loadProgress();
-  // wait briefly for KaTeX auto-render to be available
-  let tries=0;(function waitK(){if(window.renderMathInElement||tries>20){render();}else{tries++;setTimeout(waitK,80);}})();
-})();
-</script>
+<footer>
+  Học Toán — dự án mã nguồn mở ·
+  <a href="https://github.com/linkhoang19931-hub/math" target="_blank" rel="noopener">GitHub</a>
+</footer>
