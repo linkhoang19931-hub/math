@@ -964,8 +964,22 @@ const KMACROS={
   "\\cov":"\\operatorname{cov}",
   "\\given":"\\mid"
 };
+function processLatex(html){
+  if(!window.katex)return html;
+  return html
+    .replace(/\\\[([^]*?)\\\]/g,function(_,m){
+      try{return katex.renderToString(m,{displayMode:true,macros:KMACROS,throwOnError:false});}
+      catch(e){return '\\['+m+'\\]';}
+    })
+    .replace(/\\\(([^]*?)\\\)/g,function(_,m){
+      try{return katex.renderToString(m,{displayMode:false,macros:KMACROS,throwOnError:false});}
+      catch(e){return '\\('+m+'\\)';}
+    });
+}
 function renderMath(node){
-  if(window.renderMathInElement){
+  if(window.katex){
+    node.innerHTML=processLatex(node.innerHTML);
+  }else if(window.renderMathInElement){
     try{renderMathInElement(node,{delimiters:[
       {left:'\\[',right:'\\]',display:true},
       {left:'\\(',right:'\\)',display:false}
